@@ -34,7 +34,7 @@ implements IContainerBuilder<TServiceMap> {
   }
 
   decorate <
-  TKey extends keyof TTServiceMap = keyof TServiceMap,
+    TKey extends keyof TTServiceMap,
     TTServiceMap extends TServiceMap = TServiceMap
   >(
     key: TKey,
