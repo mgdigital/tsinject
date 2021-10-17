@@ -15,11 +15,17 @@
     "build": "rimraf lib/* && tsc --project tsconfig.build.json"
   },
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": "./lib/index.js",
+    "./lib/": "./lib/"
+  },
   "files": [
     "lib",
     "src",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "tsconfig.json"
   ],
   "dependencies": {
     "tslib": "^2.3.1"
