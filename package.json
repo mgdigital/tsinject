@@ -18,7 +18,6 @@
   "types": "lib/index.d.ts",
   "files": [
     "lib",
-    "src",
     "LICENSE",
     "README.md",
     "tsconfig.json"
