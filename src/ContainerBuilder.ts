@@ -17,7 +17,7 @@ implements IContainerBuilder<TServiceMap> {
   ) { }
 
   static create (): IContainerBuilder {
-    return new ContainerBuilder({}) as IContainerBuilder
+    return new ContainerBuilder({})
   }
 
   define <
@@ -42,7 +42,7 @@ implements IContainerBuilder<TServiceMap> {
   ): IContainerBuilder<TServiceMap> {
     return this.define(
       key as ContainerKey,
-      decorator(this.factories[key as never] as never) as never
+      decorator(this.factories[key as ContainerKey] as Factory<TTServiceMap[TKey]>)
     ) as IContainerBuilder<TServiceMap>
   }
 
