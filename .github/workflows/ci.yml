@@ -12,7 +12,7 @@ jobs:
         with:
           node-version: '14'
       - run: npm install -g yarn
-      - run: yarn install --immutable --check-cache
+      - run: yarn install --immutable
       - run: yarn compile-check
       - run: yarn lint
       - run: yarn test
