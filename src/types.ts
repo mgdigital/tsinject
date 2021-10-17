@@ -41,12 +41,11 @@ export interface IContainerBuilder<
   TServiceMap extends ContainerServiceMap = ContainerServiceMap
 > {
   define: <
-    TKey extends ContainerKey = ContainerKey,
-    TService = unknown,
-    TDeps extends ContainerServiceMap = ContainerServiceMap
+    TKey extends ContainerKey,
+    TService
   >(
     key: TKey,
-    factory: Factory<TService, TDeps>
+    factory: Factory<TService, TServiceMap>
   ) => IContainerBuilder<TServiceMap & { [key in TKey]: TService }>
 
   decorate: <TKey extends ContainerKeyOf<TServiceMap>>(
@@ -55,13 +54,13 @@ export interface IContainerBuilder<
   ) => IContainerBuilder<TServiceMap>
 
   use: <
-    TModuleServices extends ContainerServiceMap = ContainerServiceMap
+    TModuleServices extends ContainerServiceMap
   >(module: ContainerModule<TModuleServices, TServiceMap>) => IContainerBuilder<TServiceMap & TModuleServices>
 
   createContainer: () => IContainer<TServiceMap>
 }
 
 export type ContainerModule<
-  TServiceMap extends ContainerServiceMap = ContainerServiceMap,
+  TServiceMap extends ContainerServiceMap,
   TDeps extends ContainerServiceMap = ContainerServiceMap
 > = (builder: IContainerBuilder<TDeps>) => IContainerBuilder<TDeps & TServiceMap>
