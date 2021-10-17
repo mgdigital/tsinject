@@ -698,6 +698,7 @@ __metadata:
     eslint-plugin-node: ^11.1.0
     eslint-plugin-promise: ^5.1.0
     jest: ^27.2.5
+    mkdirp: ^1.0.4
     rimraf: ^3.0.2
     ts-jest: ^27.0.7
     tslib: ^2.3.1
