@@ -1,6 +1,5 @@
 import type {
   ContainerKey,
-  ContainerKeyOf,
   ContainerServiceMap,
   FactoryMap,
   IContainer
@@ -9,7 +8,7 @@ import { containerKeys, DefinitionNotFoundError } from '.'
 import memoize from './memoize'
 
 type GetterMap<TServiceMap extends ContainerServiceMap = ContainerServiceMap> = {
-  [ref in ContainerKeyOf<TServiceMap>]: () => TServiceMap[ref]
+  [ref in keyof TServiceMap]: () => TServiceMap[ref]
 }
 
 class Container<TServiceMap extends ContainerServiceMap> implements IContainer<TServiceMap> {
@@ -33,15 +32,16 @@ class Container<TServiceMap extends ContainerServiceMap> implements IContainer<T
   }
 
   get <
-    TKey extends ContainerKeyOf<TServiceMap>
+    TKey extends keyof TTServiceMap,
+    TTServiceMap extends TServiceMap
   >(
     ref: TKey
-  ): TServiceMap[TKey] {
-    const getter = this.getters[ref]
+  ): TTServiceMap[TKey] {
+    const getter = this.getters[ref as keyof TServiceMap]
     if (getter === undefined) {
-      throw new DefinitionNotFoundError(ref)
+      throw new DefinitionNotFoundError(ref as ContainerKey)
     }
-    return getter()
+    return getter() as TTServiceMap[TKey]
   }
 }
 

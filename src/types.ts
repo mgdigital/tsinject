@@ -7,35 +7,34 @@ export type ContainerServiceMap<
   [key in TKey]: T
 }
 
-export type ContainerKeyOf<TServiceMap extends ContainerServiceMap> = Extract<keyof TServiceMap, ContainerKey>
-
 export interface IContainer<
   TServiceMap extends ContainerServiceMap = ContainerServiceMap
 > {
   keys: ContainerKey[]
 
   get: <
-    TKey extends ContainerKeyOf<TServiceMap>
+    TKey extends keyof TTServiceMap = keyof TServiceMap,
+    TTServiceMap extends TServiceMap = TServiceMap
   >(
     ref: TKey
-  ) => TServiceMap[TKey]
+  ) => TTServiceMap[TKey]
 }
 
 export type Factory<
   T,
-  TDeps extends ContainerServiceMap = ContainerServiceMap
-> = (container: IContainer<TDeps>) => T
+  TServiceMap extends ContainerServiceMap = ContainerServiceMap
+> = (container: IContainer<TServiceMap>) => T
 
 export type FactoryMap<
-  TDeps extends ContainerServiceMap = ContainerServiceMap
+  TServiceMap extends ContainerServiceMap = ContainerServiceMap
 > = {
-  [key in ContainerKeyOf<TDeps>]: Factory<TDeps[key], TDeps>
+  [key in keyof TServiceMap]: Factory<TServiceMap[key], TServiceMap>
 }
 
 export type Decorator<
-  T,
-  TDeps extends ContainerServiceMap = ContainerServiceMap
-> = (factory: Factory<T, TDeps>) => Factory<T, TDeps>
+  TServiceMap extends ContainerServiceMap = ContainerServiceMap,
+  TKey extends keyof TServiceMap = keyof TServiceMap
+> = (factory: Factory<TServiceMap[TKey], TServiceMap>) => Factory<TServiceMap[TKey], TServiceMap>
 
 export interface IContainerBuilder<
   TServiceMap extends ContainerServiceMap = ContainerServiceMap
@@ -46,21 +45,26 @@ export interface IContainerBuilder<
   >(
     key: TKey,
     factory: Factory<TService, TServiceMap>
-  ) => IContainerBuilder<TServiceMap & { [key in TKey]: TService }>
+  ) => IContainerBuilder<TServiceMap & Record<TKey, TService>>
 
-  decorate: <TKey extends ContainerKeyOf<TServiceMap>>(
+  decorate: <
+    TKey extends keyof TTServiceMap,
+    TTServiceMap extends TServiceMap = TServiceMap
+  >(
     key: TKey,
-    decorator: Decorator<TServiceMap[TKey], TServiceMap>
+    decorator: Decorator<TTServiceMap, TKey>
   ) => IContainerBuilder<TServiceMap>
 
   use: <
     TModuleServices extends ContainerServiceMap
-  >(module: ContainerModule<TModuleServices, TServiceMap>) => IContainerBuilder<TServiceMap & TModuleServices>
+  >(
+    module: ContainerModule<TModuleServices, TServiceMap>
+  ) => IContainerBuilder<TServiceMap & TModuleServices>
 
   createContainer: () => IContainer<TServiceMap>
 }
 
 export type ContainerModule<
-  TServiceMap extends ContainerServiceMap,
-  TDeps extends ContainerServiceMap = ContainerServiceMap
-> = (builder: IContainerBuilder<TDeps>) => IContainerBuilder<TDeps & TServiceMap>
+  TProvidedServiceMap extends ContainerServiceMap = ContainerServiceMap,
+  TRequiredServiceMap extends ContainerServiceMap = ContainerServiceMap
+> = (builder: IContainerBuilder<TRequiredServiceMap>) => IContainerBuilder<TRequiredServiceMap & TProvidedServiceMap>
