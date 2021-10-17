@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "compile-check": "tsc --project tsconfig.test.json --noEmit",
-    "lint": "eslint --ext ts src test",
+    "lint": "eslint src test",
     "test": "jest",
     "check": "yarn compile-check && yarn lint && yarn test",
     "build": "rimraf lib/* && tsc --project tsconfig.build.json"
