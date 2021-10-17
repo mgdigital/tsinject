@@ -1,8 +1,9 @@
+name: CI
 on:
   pull_request:
     branches:
       - main
-joba:
+jobs:
   ci:
     steps:
       - uses: actions/checkout@v2
