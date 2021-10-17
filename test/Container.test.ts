@@ -20,7 +20,7 @@ describe('Container', () => {
       .use(hiResTimeModule.default)
       .createContainer()
     expect(container.keys).toEqual([
-      processEnvModule.keys.processEnv, 
+      processEnvModule.keys.processEnv,
       hiResTimeModule.keys.getHiResTime,
       hiResTimeModule.keys.hiResTimer,
       'foo'

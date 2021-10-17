@@ -3,12 +3,12 @@ import type { GetHiResTime, HiResTimer } from './types'
 import * as keys from './keys'
 import * as utils from './utils'
 
-export const getHiResTime: Factory<GetHiResTime> = () => 
+export const getHiResTime: Factory<GetHiResTime> = () =>
   utils.getHiResTime
 
 export const hiResTimer: Factory<HiResTimer, {
   [keys.getHiResTime]: GetHiResTime
-}> = container => 
+}> = container =>
   utils.hiResTimer(
     container.get(keys.getHiResTime)
   )

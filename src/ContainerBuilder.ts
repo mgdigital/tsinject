@@ -41,7 +41,7 @@ implements IContainerBuilder<TServiceMap> {
     decorator: Decorator<TTServiceMap, TKey>
   ): IContainerBuilder<TServiceMap> {
     return this.define(
-      key as ContainerKey, 
+      key as ContainerKey,
       decorator(this.factories[key as never] as never) as never
     ) as IContainerBuilder<TServiceMap>
   }

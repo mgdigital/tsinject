@@ -1,1 +1,1 @@
-export const processEnv: unique symbol = Symbol('processEnv')
+export const processEnv = Symbol('processEnv')

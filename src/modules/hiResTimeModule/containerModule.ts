@@ -1,5 +1,5 @@
-import { ContainerModule } from '../..'
-import { ServiceMap } from './types'
+import type { ContainerModule } from '../../types'
+import type { ServiceMap } from './types'
 import * as factories from './factories'
 import * as keys from './keys'
 
