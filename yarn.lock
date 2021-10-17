@@ -688,6 +688,7 @@ __metadata:
   resolution: "@mgdigital/tsinject@workspace:."
   dependencies:
     "@types/jest": ^27.0.2
+    "@types/mkdirp": ^1
     "@types/node": ^16.11.0
     "@typescript-eslint/eslint-plugin": ^4.33.0
     "@typescript-eslint/parser": ^4.33.0
@@ -698,6 +699,7 @@ __metadata:
     eslint-plugin-node: ^11.1.0
     eslint-plugin-promise: ^5.1.0
     jest: ^27.2.5
+    mkdirp: ^1.0.4
     rimraf: ^3.0.2
     ts-jest: ^27.0.7
     tslib: ^2.3.1
@@ -873,6 +875,15 @@ __metadata:
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
   checksum: e60b153664572116dfea673c5bda7778dbff150498f44f998e34b5886d8afc47f16799280e4b6e241c0472aef1bc36add771c569c68fc5125fc2ae519a3eb9ac
+  languageName: node
+  linkType: hard
+
+"@types/mkdirp@npm:^1":
+  version: 1.0.2
+  resolution: "@types/mkdirp@npm:1.0.2"
+  dependencies:
+    "@types/node": "*"
+  checksum: 72dedfb2d250f0e44ec964ac68ff6a4a03d7d9d6e83ae1d5ba6d212791af69cf051a5fac59846826242d099de56a18c8e0581861792fae8b845b3c9ad67ecdeb
   languageName: node
   linkType: hard
 
