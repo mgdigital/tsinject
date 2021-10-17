@@ -1,9 +1,9 @@
-import type { 
-  ContainerKey, 
-  ContainerKeyOf, 
-  ContainerServiceMap, 
-  FactoryMap, 
-  IContainer 
+import type {
+  ContainerKey,
+  ContainerKeyOf,
+  ContainerServiceMap,
+  FactoryMap,
+  IContainer
 } from './types'
 import { containerKeys, DefinitionNotFoundError } from '.'
 import memoize from './memoize'
