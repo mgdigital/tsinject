@@ -1,4 +1,10 @@
-import type { ContainerKeyOf, ContainerServiceMap, FactoryMap, IContainer } from './types'
+import type { 
+  ContainerKey, 
+  ContainerKeyOf, 
+  ContainerServiceMap, 
+  FactoryMap, 
+  IContainer 
+} from './types'
 import { containerKeys, DefinitionNotFoundError } from '.'
 import memoize from './memoize'
 
@@ -22,7 +28,7 @@ class Container<TServiceMap extends ContainerServiceMap> implements IContainer<T
       ) as GetterMap<TServiceMap>
   }
 
-  get keys (): Array<ContainerKeyOf<TServiceMap>> {
+  get keys (): ContainerKey[] {
     return containerKeys(this.getters)
   }
 
