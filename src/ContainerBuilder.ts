@@ -22,12 +22,11 @@ implements IContainerBuilder<TServiceMap> {
   }
 
   define <
-    TKey extends ContainerKey = ContainerKey,
-    TService = unknown,
-    TDeps extends ContainerServiceMap = ContainerServiceMap
+    TKey extends ContainerKey,
+    TService
   >(
     key: TKey,
-    factory: Factory<TService, TDeps>
+    factory: Factory<TService, TServiceMap>
    ): IContainerBuilder<TServiceMap & { [key in TKey]: TService }> {
     return new ContainerBuilder({
       ...this.factories,
@@ -43,7 +42,7 @@ implements IContainerBuilder<TServiceMap> {
   }
 
   use <
-    TModuleServices extends ContainerServiceMap = ContainerServiceMap
+    TModuleServices extends ContainerServiceMap
   >(module: ContainerModule<TModuleServices, TServiceMap>): IContainerBuilder<TServiceMap & TModuleServices> {
     return module(this)
   }
