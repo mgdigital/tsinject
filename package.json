@@ -1,6 +1,6 @@
 {
   "name": "@mgdigital/tsinject",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mgdigital/tsinject.git"
@@ -18,7 +18,6 @@
   "types": "lib/index.d.ts",
   "files": [
     "lib",
-    "src",
     "LICENSE",
     "README.md",
     "tsconfig.json"

@@ -12,7 +12,7 @@ export type ContainerKeyOf<TServiceMap extends ContainerServiceMap> = Extract<ke
 export interface IContainer<
   TServiceMap extends ContainerServiceMap = ContainerServiceMap
 > {
-  keys: Array<ContainerKeyOf<TServiceMap>>
+  keys: ContainerKey[]
 
   get: <
     TKey extends ContainerKeyOf<TServiceMap>
