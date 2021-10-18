@@ -1,4 +1,4 @@
-import { DefinitionNotFoundError, newContainerBuilder } from '../src'
+import { ServiceNotFoundError, newContainerBuilder } from '../src'
 import * as hiResTimeModule from '../src/modules/hiResTimeModule'
 import * as processEnvModule from '../src/modules/processEnvModule'
 
@@ -37,6 +37,6 @@ describe('Container', () => {
     expect(container.has(processEnvModule.keys.processEnv)).toEqual(true)
     expect(container.has('foo')).toEqual(true)
     expect(container.has('oof')).toEqual(false)
-    expect(() => container.get('oof')).toThrow(new DefinitionNotFoundError('oof'))
+    expect(() => container.get('oof')).toThrow(new ServiceNotFoundError('oof'))
   })
 })

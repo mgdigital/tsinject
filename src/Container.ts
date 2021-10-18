@@ -4,7 +4,7 @@ import type {
   FactoryMap,
   IContainer
 } from './types'
-import { containerKeys, DefinitionNotFoundError } from '.'
+import { containerKeys, ServiceNotFoundError } from '.'
 import memoize from './memoize'
 
 type GetterMap<TServiceMap extends ContainerServiceMap = ContainerServiceMap> = {
@@ -44,7 +44,7 @@ class Container<TServiceMap extends ContainerServiceMap> implements IContainer<T
   ): T {
     const getter = this.getters[ref]
     if (getter === undefined) {
-      throw new DefinitionNotFoundError(ref as ContainerKey)
+      throw new ServiceNotFoundError(ref as ContainerKey)
     }
     return getter() as T
   }
