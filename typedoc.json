@@ -4,5 +4,6 @@
   ],
   "out": "docs",
   "includeVersion": true,
-  "treatWarningsAsErrors": true
+  "treatWarningsAsErrors": true,
+  "gitRevision": "main"
 }
