@@ -1,9 +1,9 @@
-import type { ContainerModule } from '../../types'
+import type { ContainerModule } from '@mgdigital/tsinject'
 import type { ServiceMap } from './types'
 import * as keys from './keys'
 import * as utils from './utils'
 
-const containerModule: ContainerModule<ServiceMap> = builder => builder
+const highResTimerModule: ContainerModule<ServiceMap> = builder => builder
   .define(
     keys.getHighResTime,
     () => utils.getHighResTime
@@ -15,4 +15,4 @@ const containerModule: ContainerModule<ServiceMap> = builder => builder
     )
   )
 
-export default containerModule
+export default highResTimerModule

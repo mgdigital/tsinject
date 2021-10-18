@@ -1,13 +1,13 @@
 import { ServiceNotFoundError, newContainerBuilder } from '../src'
-import * as hiResTimeModule from '../src/modules/highResTimeModule'
-import * as processEnvModule from '../src/modules/processEnvModule'
+import * as highResTimer from '../examples/highResTimer'
+import * as processEnv from '../examples/processEnv'
 
 describe('Container', () => {
   it('should work', () => {
     const container = newContainerBuilder()
-      .use(processEnvModule.default)
+      .use(processEnv.processEnvModule)
       .decorate(
-        processEnvModule.keys.processEnv,
+        processEnv.keys.processEnv,
         f => c => ({
           ...f(c),
           foo: 'bar'
@@ -17,24 +17,24 @@ describe('Container', () => {
         'foo',
         () => 'bar'
       )
-      .use(hiResTimeModule.default)
+      .use(highResTimer.highResTimerModule)
       .createContainer()
     expect(container.keys).toEqual([
-      processEnvModule.keys.processEnv,
-      hiResTimeModule.keys.getHighResTime,
-      hiResTimeModule.keys.highResTimer,
+      processEnv.keys.processEnv,
+      highResTimer.keys.getHighResTime,
+      highResTimer.keys.highResTimer,
       'foo'
     ])
-    const env = container.get(processEnvModule.keys.processEnv)
+    const env = container.get(processEnv.keys.processEnv)
     expect(env).toEqual({
       ...process.env,
       foo: 'bar'
     })
-    expect(container.get(processEnvModule.keys.processEnv) === env).toEqual(true)
-    expect(process.hrtime.bigint()).toBeLessThan(container.get(hiResTimeModule.keys.getHighResTime)())
-    expect(typeof container.get(hiResTimeModule.keys.highResTimer)).toEqual('function')
+    expect(container.get(processEnv.keys.processEnv) === env).toEqual(true)
+    expect(process.hrtime.bigint()).toBeLessThan(container.get(highResTimer.keys.getHighResTime)())
+    expect(typeof container.get(highResTimer.keys.highResTimer)).toEqual('function')
     expect(container.get('foo')).toEqual('bar')
-    expect(container.has(processEnvModule.keys.processEnv)).toEqual(true)
+    expect(container.has(processEnv.keys.processEnv)).toEqual(true)
     expect(container.has('foo')).toEqual(true)
     expect(container.has('oof')).toEqual(false)
     expect(() => container.get('oof')).toThrow(new ServiceNotFoundError('oof'))

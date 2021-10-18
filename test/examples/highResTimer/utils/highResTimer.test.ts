@@ -1,4 +1,4 @@
-import { highResTimer } from '../../../src/modules/highResTimeModule/utils'
+import { highResTimer } from '../../../../examples/highResTimer/utils'
 
 describe('highResTimer', () => {
   it('should time duration in high resolution', () => {
