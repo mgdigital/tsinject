@@ -2,7 +2,7 @@
   "entryPoints": [
     "./src"
   ],
-  "out": "docs/typedoc",
+  "out": "docs",
   "includeVersion": true,
   "treatWarningsAsErrors": true
 }
