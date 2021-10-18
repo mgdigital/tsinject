@@ -6,8 +6,8 @@ export type ContainerKey = symbol | string
 /**
  * A map of container keys to the type of the service they represent.
  *
- * @typeParam TKey The type of the container key.
- * @typeParam T The type of the service.
+ * @typeParam TKey - The type of the container key.
+ * @typeParam T - The type of the service.
  */
 export type ContainerServiceMap<
   TKey extends ContainerKey = ContainerKey,
@@ -19,7 +19,7 @@ export type ContainerServiceMap<
 /**
  * Container interface.
  *
- * @typeParam TServiceMap The [[ContainerServiceMap]] of the container.
+ * @typeParam TServiceMap - The [[ContainerServiceMap]] of the container.
  */
 export interface IContainer<
   TServiceMap extends ContainerServiceMap = ContainerServiceMap
@@ -32,9 +32,9 @@ export interface IContainer<
   /**
    * Get a service from the container.
    *
-   * @typeParam TKey The type of the container key of the service to get.
-   * @typeParam T The type of the service to get.
-   * @param key The container key of the service to get.
+   * @typeParam TKey - The type of the container key of the service to get.
+   * @typeParam T - The type of the service to get.
+   * @param key - The container key of the service to get.
    */
   get: <
     TKey extends keyof TServiceMap = keyof TServiceMap,
@@ -46,9 +46,9 @@ export interface IContainer<
   /**
    * Check if a container key is defined in the container.
    *
-   * @typeParam TKey The container key of the service to check.
-   * @typeParam T The type of the service to check.
-   * @param key The container key of the service to check.
+   * @typeParam TKey - The container key of the service to check.
+   * @typeParam T - The type of the service to check.
+   * @param key - The container key of the service to check.
    */
   has: <
     TKey extends keyof TServiceMap = keyof TServiceMap,
@@ -61,7 +61,7 @@ export interface IContainer<
 /**
  * Container builder interface.
  *
- * @typeParam TServiceMap The [[ContainerServiceMap]] of services currently defined in the builder.
+ * @typeParam TServiceMap - The [[ContainerServiceMap]] of services currently defined in the builder.
  */
 export interface IContainerBuilder<
   TServiceMap extends ContainerServiceMap = ContainerServiceMap
@@ -69,8 +69,8 @@ export interface IContainerBuilder<
   /**
    * Define a service in the container builder.
    *
-   * @typeParam TKey The container key of the service.
-   * @typeParam TService The type of the service being defined.
+   * @typeParam TKey - The container key of the service.
+   * @typeParam TService - The type of the service being defined.
    */
   define: <
     TKey extends ContainerKey,
@@ -83,8 +83,8 @@ export interface IContainerBuilder<
   /**
    * Decorate a service already defined in the builder.
    *
-   * @typeParam TKey The container key of the service.
-   * @typeParam TTServiceMap The [[ContainerServiceMap]] of services required by the service.
+   * @typeParam TKey - The container key of the service.
+   * @typeParam TTServiceMap - The [[ContainerServiceMap]] of services required by the service.
    */
   decorate: <
     TKey extends keyof TTServiceMap,
@@ -97,7 +97,7 @@ export interface IContainerBuilder<
   /**
    * Use a [[ContainerModule]] in this builder.
    *
-   * @typeParam TModuleServices The [[ContainerServiceMap]] of services provided by the module.
+   * @typeParam TModuleServices - The [[ContainerServiceMap]] of services provided by the module.
    */
   use: <
     TModuleServices extends ContainerServiceMap
@@ -114,8 +114,8 @@ export interface IContainerBuilder<
 /**
  * A function that can create a service using a container of its dependencies.
  *
- * @typeParam T The type of the service.
- * @typeParam TServiceMap The type of the [[ContainerServiceMap]] that the service depends on.
+ * @typeParam T - The type of the service.
+ * @typeParam TServiceMap - The type of the [[ContainerServiceMap]] that the service depends on.
  */
  export type Factory<
  T,
@@ -134,9 +134,9 @@ export type Decorator<
 /**
  * A container module encapsulates one or more calls to an [[IContainerBuilder]] as a reusable component.
  *
- * @typeParam TProvidedServiceMap The type of the [[ContainerServiceMap]] being provided by the module.
- * @typeParam TRequiredServiceMap The type of the [[ContainerServiceMap]] that the module depends on.
- * @param builder A [[ContainerBuilder]] instance with the required services defined.
+ * @typeParam TProvidedServiceMap - The type of the [[ContainerServiceMap]] being provided by the module.
+ * @typeParam TRequiredServiceMap - The type of the [[ContainerServiceMap]] that the module depends on.
+ * @param builder - A [[ContainerBuilder]] instance with the required services defined.
  * @returns A [[ContainerBuilder]] instance with the provided services defined.
  */
 export type ContainerModule<
