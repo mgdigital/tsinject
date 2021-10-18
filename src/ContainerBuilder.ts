@@ -8,8 +8,11 @@ import type {
   FactoryMap,
   Factory
 } from './types'
-import { Container } from '.'
+import Container from './Container'
 
+/**
+ * Default implementation for [[IContainerBuilder]].
+ */
 class ContainerBuilder<TServiceMap extends ContainerServiceMap>
 implements IContainerBuilder<TServiceMap> {
   private constructor (

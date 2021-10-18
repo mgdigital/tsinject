@@ -11,6 +11,11 @@ type GetterMap<TServiceMap extends ContainerServiceMap = ContainerServiceMap> = 
   [ref in keyof TServiceMap]: () => TServiceMap[ref]
 }
 
+/**
+ * Default implementation for [[IContainer]].
+ *
+ * @hidden
+ */
 class Container<TServiceMap extends ContainerServiceMap> implements IContainer<TServiceMap> {
   private readonly getters: GetterMap<TServiceMap>
 
@@ -32,16 +37,25 @@ class Container<TServiceMap extends ContainerServiceMap> implements IContainer<T
   }
 
   get <
-    TKey extends keyof TTServiceMap,
-    TTServiceMap extends TServiceMap
+    TKey extends keyof TServiceMap = keyof TServiceMap,
+    T extends TServiceMap[TKey] = TServiceMap[TKey]
   >(
     ref: TKey
-  ): TTServiceMap[TKey] {
-    const getter = this.getters[ref as keyof TServiceMap]
+  ): T {
+    const getter = this.getters[ref]
     if (getter === undefined) {
       throw new DefinitionNotFoundError(ref as ContainerKey)
     }
-    return getter() as TTServiceMap[TKey]
+    return getter() as T
+  }
+
+  has <
+    TKey extends keyof TServiceMap = keyof TServiceMap,
+    T extends TServiceMap[TKey] = TServiceMap[TKey]
+  >(
+    key: TKey
+  ): this is IContainer<{ [k in TKey]: T }> {
+    return this.keys.includes(key as ContainerKey)
   }
 }
 

@@ -1,8 +1,8 @@
 import type { ContainerKey } from './types'
 
-export class InjectError extends Error {}
+export class TSInjectError extends Error {}
 
-export class DefinitionNotFoundError extends InjectError {
+export class DefinitionNotFoundError extends TSInjectError {
   constructor (
     public readonly key: ContainerKey
   ) {

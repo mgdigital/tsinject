@@ -8,5 +8,6 @@
 # !/.yarn/cache
 /.pnp.*
 
+/docs
 /lib
 /reports
