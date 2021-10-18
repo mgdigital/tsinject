@@ -1,19 +1,19 @@
 import type {
   ContainerKey,
   ContainerModule,
-  ContainerServiceMap,
   Decorator,
   IContainer,
   IContainerBuilder,
   FactoryMap,
-  Factory
+  Factory,
+  ServiceMap
 } from './types'
 import Container from './Container'
 
 /**
  * Default implementation for [[IContainerBuilder]].
  */
-class ContainerBuilder<TServiceMap extends ContainerServiceMap>
+class ContainerBuilder<TServiceMap extends ServiceMap>
 implements IContainerBuilder<TServiceMap> {
   private constructor (
     private readonly factories: FactoryMap<TServiceMap>
@@ -50,7 +50,7 @@ implements IContainerBuilder<TServiceMap> {
   }
 
   use <
-    TModuleServices extends ContainerServiceMap
+    TModuleServices extends ServiceMap
   >(module: ContainerModule<TModuleServices, TServiceMap>): IContainerBuilder<TServiceMap & TModuleServices> {
     return module(this)
   }

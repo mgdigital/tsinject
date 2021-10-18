@@ -1,13 +1,13 @@
 import type {
   ContainerKey,
-  ContainerServiceMap,
   FactoryMap,
-  IContainer
+  IContainer,
+  ServiceMap
 } from './types'
 import { containerKeys, ServiceNotFoundError } from '.'
 import memoize from './memoize'
 
-type GetterMap<TServiceMap extends ContainerServiceMap = ContainerServiceMap> = {
+type GetterMap<TServiceMap extends ServiceMap = ServiceMap> = {
   [ref in keyof TServiceMap]: () => TServiceMap[ref]
 }
 
@@ -16,7 +16,7 @@ type GetterMap<TServiceMap extends ContainerServiceMap = ContainerServiceMap> = 
  *
  * @hidden
  */
-class Container<TServiceMap extends ContainerServiceMap> implements IContainer<TServiceMap> {
+class Container<TServiceMap extends ServiceMap> implements IContainer<TServiceMap> {
   private readonly getters: GetterMap<TServiceMap>
 
   constructor (
