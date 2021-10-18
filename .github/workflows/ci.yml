@@ -13,7 +13,7 @@ jobs:
           node-version: '14'
       - run: npm install -g yarn@berry
       - run: yarn install --immutable
-      - run: yarn compile-check
+      - run: yarn check:compile
       - run: yarn lint
+      - run: yarn check:generate-docs
       - run: yarn test
-      - run: yarn build

@@ -1,10 +1,10 @@
-import { ContainerBuilder, DefinitionNotFoundError } from '../src'
+import { DefinitionNotFoundError, newContainerBuilder } from '../src'
 import * as hiResTimeModule from '../src/modules/hiResTimeModule'
 import * as processEnvModule from '../src/modules/processEnvModule'
 
 describe('Container', () => {
   it('should work', () => {
-    const container = ContainerBuilder.create()
+    const container = newContainerBuilder()
       .use(processEnvModule.default)
       .decorate(
         processEnvModule.keys.processEnv,
@@ -34,6 +34,9 @@ describe('Container', () => {
     expect(process.hrtime.bigint()).toBeLessThan(container.get(hiResTimeModule.keys.getHiResTime)())
     expect(typeof container.get(hiResTimeModule.keys.hiResTimer)).toEqual('function')
     expect(container.get('foo')).toEqual('bar')
+    expect(container.has(processEnvModule.keys.processEnv)).toEqual(true)
+    expect(container.has('foo')).toEqual(true)
+    expect(container.has('oof')).toEqual(false)
     expect(() => container.get('oof')).toThrow(new DefinitionNotFoundError('oof'))
   })
 })

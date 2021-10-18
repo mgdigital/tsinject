@@ -1,0 +1,8 @@
+{
+  "entryPoints": [
+    "./src"
+  ],
+  "out": "docs/typedoc",
+  "includeVersion": true,
+  "treatWarningsAsErrors": true
+}
