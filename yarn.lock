@@ -697,6 +697,7 @@ __metadata:
     eslint-plugin-jest: ^25.2.1
     eslint-plugin-node: ^11.1.0
     eslint-plugin-promise: ^5.1.0
+    husky: ^7.0.2
     jest: ^27.2.5
     mkdirp: ^1.0.4
     rimraf: ^3.0.2
@@ -2743,6 +2744,15 @@ fsevents@^2.3.2:
   dependencies:
     ms: ^2.0.0
   checksum: 9c7a74a2827f9294c009266c82031030eae811ca87b0da3dceb8d6071b9bde22c9f3daef0469c3c533cc67a97d8a167cd9fc0389350e5f415f61a79b171ded16
+  languageName: node
+  linkType: hard
+
+"husky@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "husky@npm:7.0.2"
+  bin:
+    husky: lib/bin.js
+  checksum: 2ccfe6ddc51dc05ae8ea1e2fbb893344e93a813e00c595d6b5f5e704b7b998d6b0e2adda7c57f99b5e46a60dc07c7d860269a2ea91661c6bacef0eca8e0b8e96
   languageName: node
   linkType: hard
 
