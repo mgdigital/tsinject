@@ -8,7 +8,7 @@ import { containerKeys, ServiceNotFoundError } from '.'
 import memoize from './memoize'
 
 type GetterMap<TServiceMap extends ServiceMap = ServiceMap> = {
-  [ref in keyof TServiceMap]: () => TServiceMap[ref]
+  [key in keyof TServiceMap]: () => TServiceMap[key]
 }
 
 /**
@@ -40,11 +40,11 @@ class Container<TServiceMap extends ServiceMap> implements IContainer<TServiceMa
     TKey extends keyof TServiceMap = keyof TServiceMap,
     T extends TServiceMap[TKey] = TServiceMap[TKey]
   >(
-    ref: TKey
+    key: TKey
   ): T {
-    const getter = this.getters[ref]
+    const getter = this.getters[key]
     if (getter === undefined) {
-      throw new ServiceNotFoundError(ref as ContainerKey)
+      throw new ServiceNotFoundError(key as ContainerKey)
     }
     return getter() as T
   }
