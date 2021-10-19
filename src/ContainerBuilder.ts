@@ -6,7 +6,8 @@ import type {
   IContainerBuilder,
   FactoryMap,
   Factory,
-  ServiceMap
+  ServiceMap,
+  ServiceTypeOf
 } from './types'
 import Container from './Container'
 
@@ -29,11 +30,11 @@ implements IContainerBuilder<TServiceMap> {
   >(
     key: TKey,
     factory: Factory<TService, TServiceMap>
-   ): IContainerBuilder<TServiceMap & Record<TKey, TService>> {
+   ): IContainerBuilder<TServiceMap & { [key in TKey]: TService }> {
     return new ContainerBuilder({
       ...this.factories,
       [key]: factory
-    } as FactoryMap<TServiceMap & Record<TKey, TService>>)
+    } as FactoryMap<TServiceMap & { [key in TKey]: TService }>)
   }
 
   decorate <
@@ -45,8 +46,10 @@ implements IContainerBuilder<TServiceMap> {
   ): IContainerBuilder<TServiceMap> {
     return this.define(
       key as ContainerKey,
-      decorator(this.factories[key as ContainerKey] as Factory<TTServiceMap[TKey]>)
-    ) as IContainerBuilder<TServiceMap>
+      decorator(
+        this.factories[key as ContainerKey] as Factory<ServiceTypeOf<TTServiceMap, TKey>>
+      )
+    )
   }
 
   use <
