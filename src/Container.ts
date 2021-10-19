@@ -1,14 +1,15 @@
 import type {
   ContainerKey,
-  ContainerServiceMap,
   FactoryMap,
-  IContainer
+  IContainer,
+  ServiceMap,
+  ServiceTypeOf
 } from './types'
-import { containerKeys, DefinitionNotFoundError } from '.'
+import { containerKeys, ServiceNotFoundError } from '.'
 import memoize from './memoize'
 
-type GetterMap<TServiceMap extends ContainerServiceMap = ContainerServiceMap> = {
-  [ref in keyof TServiceMap]: () => TServiceMap[ref]
+type GetterMap<TServiceMap extends ServiceMap = ServiceMap> = {
+  [key in keyof TServiceMap]: () => ServiceTypeOf<TServiceMap, key>
 }
 
 /**
@@ -16,7 +17,7 @@ type GetterMap<TServiceMap extends ContainerServiceMap = ContainerServiceMap> = 
  *
  * @hidden
  */
-class Container<TServiceMap extends ContainerServiceMap> implements IContainer<TServiceMap> {
+class Container<TServiceMap extends ServiceMap> implements IContainer<TServiceMap> {
   private readonly getters: GetterMap<TServiceMap>
 
   constructor (
@@ -37,24 +38,22 @@ class Container<TServiceMap extends ContainerServiceMap> implements IContainer<T
   }
 
   get <
-    TKey extends keyof TServiceMap = keyof TServiceMap,
-    T extends TServiceMap[TKey] = TServiceMap[TKey]
+    TKey extends keyof TServiceMap = keyof TServiceMap
   >(
-    ref: TKey
-  ): T {
-    const getter = this.getters[ref]
+    key: TKey
+  ): ServiceTypeOf<TServiceMap, TKey> {
+    const getter = this.getters[key]
     if (getter === undefined) {
-      throw new DefinitionNotFoundError(ref as ContainerKey)
+      throw new ServiceNotFoundError(key as ContainerKey)
     }
-    return getter() as T
+    return getter()
   }
 
   has <
-    TKey extends keyof TServiceMap = keyof TServiceMap,
-    T extends TServiceMap[TKey] = TServiceMap[TKey]
+    TKey extends keyof TServiceMap = keyof TServiceMap
   >(
     key: TKey
-  ): this is IContainer<{ [k in TKey]: T }> {
+  ): this is IContainer<{ [k in TKey]: ServiceTypeOf<TServiceMap, TKey> }> {
     return this.keys.includes(key as ContainerKey)
   }
 }

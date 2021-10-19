@@ -1,19 +1,20 @@
 import type {
   ContainerKey,
   ContainerModule,
-  ContainerServiceMap,
   Decorator,
   IContainer,
   IContainerBuilder,
   FactoryMap,
-  Factory
+  Factory,
+  ServiceMap,
+  ServiceTypeOf
 } from './types'
 import Container from './Container'
 
 /**
  * Default implementation for [[IContainerBuilder]].
  */
-class ContainerBuilder<TServiceMap extends ContainerServiceMap>
+class ContainerBuilder<TServiceMap extends ServiceMap>
 implements IContainerBuilder<TServiceMap> {
   private constructor (
     private readonly factories: FactoryMap<TServiceMap>
@@ -29,11 +30,11 @@ implements IContainerBuilder<TServiceMap> {
   >(
     key: TKey,
     factory: Factory<TService, TServiceMap>
-   ): IContainerBuilder<TServiceMap & Record<TKey, TService>> {
+   ): IContainerBuilder<TServiceMap & { [key in TKey]: TService }> {
     return new ContainerBuilder({
       ...this.factories,
       [key]: factory
-    } as FactoryMap<TServiceMap & Record<TKey, TService>>)
+    } as FactoryMap<TServiceMap & { [key in TKey]: TService }>)
   }
 
   decorate <
@@ -45,12 +46,14 @@ implements IContainerBuilder<TServiceMap> {
   ): IContainerBuilder<TServiceMap> {
     return this.define(
       key as ContainerKey,
-      decorator(this.factories[key as ContainerKey] as Factory<TTServiceMap[TKey]>)
-    ) as IContainerBuilder<TServiceMap>
+      decorator(
+        this.factories[key as ContainerKey] as Factory<ServiceTypeOf<TTServiceMap, TKey>>
+      )
+    )
   }
 
   use <
-    TModuleServices extends ContainerServiceMap
+    TModuleServices extends ServiceMap
   >(module: ContainerModule<TModuleServices, TServiceMap>): IContainerBuilder<TServiceMap & TModuleServices> {
     return module(this)
   }

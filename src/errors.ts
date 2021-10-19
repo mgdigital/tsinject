@@ -1,8 +1,14 @@
 import type { ContainerKey } from './types'
 
+/**
+ * Base class for all errors thrown by tsinject.
+ */
 export class TSInjectError extends Error {}
 
-export class DefinitionNotFoundError extends TSInjectError {
+/**
+ * Error thrown when a non-existent key is requested from the container.
+ */
+export class ServiceNotFoundError extends TSInjectError {
   constructor (
     public readonly key: ContainerKey
   ) {
