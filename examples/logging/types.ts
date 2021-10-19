@@ -1,16 +1,23 @@
-import type * as keys from './keys'
-
 export type LogLevel = 'debug' | 'info' | 'error'
 
-export type LogWriter = (level: LogLevel, message: string, data?: Record<string, unknown>) => void
+export type LogFormatter = (level: LogLevel, message: string, data?: Record<string, unknown>) => string[]
+
+export type LogWriter = (logLine: string[]) => void
+
+export type LogWithLevelFunction = (level: LogLevel, message: string, data?: Record<string, unknown>) => void
 
 export type LogFunction = (message: string, data?: Record<string, unknown>) => void
 
-export type ILogger = {
-  [level in LogLevel]: LogFunction
+export type LoggerConfig = {
+  level: LogLevel
+  pretty: boolean
 }
 
-export type ServiceMap = {
-  [keys.logWriter]: LogWriter
-  [keys.logger]: ILogger
+export type ILogger = {
+  level: LogLevel
+  is: (level: LogLevel) => boolean
+  log: LogWithLevelFunction
+  debug: LogFunction
+  info: LogFunction
+  error: LogFunction
 }

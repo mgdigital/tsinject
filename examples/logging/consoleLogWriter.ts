@@ -1,6 +1,6 @@
-import type { LogWriter } from './types'
+import type { LogWriter } from '../logging/types'
 
-const consoleLogWriter: LogWriter = (level, message, data) =>
-  console.log(`${level}: ${message}`, data)
+const consoleLogWriter: LogWriter = (logLine) =>
+  console.log(...logLine)
 
 export default consoleLogWriter

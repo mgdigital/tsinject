@@ -1,5 +1,5 @@
 import type * as keys from './keys'
 
-export type ServiceMap = {
+export type ProcessEnvServices = {
   [keys.processEnv]: NodeJS.ProcessEnv
 }

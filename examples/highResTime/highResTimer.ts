@@ -1,4 +1,4 @@
-import type { GetHighResTime, HighResTimer } from '../types'
+import type { GetHighResTime, HighResTimer } from './types'
 
 const highResTimer = (getHighResTime: GetHighResTime): HighResTimer => () => {
   const startTime = getHighResTime()

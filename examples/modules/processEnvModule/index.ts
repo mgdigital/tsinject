@@ -1,10 +1,10 @@
 import type { ContainerModule } from '@mgdigital/tsinject'
-import type { ServiceMap } from './types'
+import type { ProcessEnvServices } from './types'
 import * as keys from './keys'
-import getProcessEnv from './getProcessEnv'
+import getProcessEnv from '../../processEnv/getProcessEnv'
 
 const processEnvModule: ContainerModule<
-  ServiceMap
+  ProcessEnvServices
 > =
   builder => builder
     .define(
@@ -13,3 +13,5 @@ const processEnvModule: ContainerModule<
     )
 
 export default processEnvModule
+export * as keys from './keys'
+export * from './types'

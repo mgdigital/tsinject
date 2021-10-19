@@ -1,4 +1,4 @@
 import container from './container'
 import * as keys from './keys'
 
-container.get(keys.demoRunner)()
+void container.get(keys.demoRunner)()
