@@ -18,7 +18,7 @@ Several dependency injection solutions exist for TypeScript. Most use either dec
 
 <span style="color:red">&cross;</span> The code of the class needs modifying to work with the container (e.g. by adding decorators or static properties).
 
-<span style="color:red">&cross;</span> It will only work with the `experimentalDecorators` option enabled.
+<span style="color:red">&cross;</span> It will only work with the `experimentalDecorators` compiler option enabled.
 
 **tsinject** adopts an alternative approach with several objectives:
 

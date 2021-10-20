@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import type { AddTaskRequest, ITaskService, TaskStatus } from './types'
 
-const tasksFastifyAppRouter = (service: ITaskService, app: FastifyInstance): FastifyInstance => app
+const taskFastifyAppRouter = (service: ITaskService, app: FastifyInstance): FastifyInstance => app
   .get(
     '/tasks',
     async () => service.listTasks()
@@ -27,4 +27,4 @@ const tasksFastifyAppRouter = (service: ITaskService, app: FastifyInstance): Fas
     async req => service.deleteTask((req.params as Record<string, string>).taskId)
   )
 
-export default tasksFastifyAppRouter
+export default taskFastifyAppRouter
