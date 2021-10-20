@@ -1,2 +1,2 @@
 export const logLevel = 'debug'
-export const pretty = false
+export const pretty = true

@@ -23,7 +23,7 @@ const prettyLogFormatter: LogFormatter = (level, message, data) => {
         colors.white(inspect(data, false, 5))
       ]
       : []
-  ]
+  ].join(' ')
 }
 
 export default prettyLogFormatter
