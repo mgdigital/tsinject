@@ -1,6 +1,6 @@
 # @mgdigital/tsinject
 
-Lightweight and flexible dependency injection container for Typescript.
+Lightweight and flexible dependency injection container for TypeScript.
 
 [![npm version](https://badge.fury.io/js/@mgdigital%2Ftsinject.svg)](https://badge.fury.io/js/@mgdigital%2Ftsinject) [![codecov](https://codecov.io/gh/mgdigital/tsinject/branch/main/graph/badge.svg)](https://codecov.io/gh/mgdigital/tsinject)
 
@@ -66,7 +66,7 @@ type LoggingServices = {
 export default LoggingServices
 ```
 
-We can then create a [[ContainerModule]] by defining a factory function for each service key (see [./examples/container/loggingModule/module.ts](https://github.com/mgdigital/tsinject/blob/main/examples/container/loggingModule/module.ts)):
+We can then create a [ContainerModule](https://mgdigital.github.io/tsinject/modules.html#ContainerModule) by defining a factory function for each service key (see [./examples/container/loggingModule/module.ts](https://github.com/mgdigital/tsinject/blob/main/examples/container/loggingModule/module.ts)):
 
 ```typescript
 import type { ContainerModule } from '@mgdigital/tsinject'
