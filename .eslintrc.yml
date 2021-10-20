@@ -3,6 +3,8 @@ extends:
   - 'standard-with-typescript'
   # https://github.com/typescript-eslint/typescript-eslint/blob/master/docs/getting-started/linting/README.md
   - 'plugin:@typescript-eslint/recommended-requiring-type-checking'
+plugins:
+  - eslint-plugin-tsdoc
 env:
   commonjs: true
   es6: true
@@ -24,3 +26,4 @@ rules:
   '@typescript-eslint/indent': off
   '@typescript-eslint/require-await': off
   '@typescript-eslint/return-await': off
+  'tsdoc/syntax': error
