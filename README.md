@@ -1,6 +1,14 @@
 # tsinject
 
-Lightweight and flexible dependency injection container for Typescript
+Lightweight and flexible dependency injection container for Typescript.
+
+[![npm version](https://badge.fury.io/js/@mgdigital%2Ftsinject.svg)](https://badge.fury.io/js/@mgdigital%2Ftsinject)
+
+## Documentation
+
+Install with `npm add @mgdigital/tsinject` or `yarn add @mgdigital/tsinject`.
+
+See [the documentation](https://mgdigital.github.io/tsinject/).
 
 ## Motivation
 
@@ -71,13 +79,16 @@ const loggingModule: ContainerModule<
   processEnvModule.services &
   LoggingServices
 > = builder => builder
+  // Use another container module that provides services required by this one
   .use(processEnvModule.default)
+  // Define a config object based on environment variables
   .define(
     keys.loggerConfig,
     container => loggerConfigFromEnv(
       container.get(processEnvModule.keys.processEnv)
     )
   )
+  // Provide a different implementation depending on environment variable configuration
   .define(
     keys.logFormatter,
     container => container.get(keys.loggerConfig).pretty
@@ -103,7 +114,7 @@ export default loggingModule
 We can now create a container from this module, get the logger service from the container and log something:
 
 ```typescript
-import type { ContainerBuilder } from '@mgdigital/tsinject'
+import { newContainerBuilder } from '@mgdigital/tsinject'
 import * as loggingModule from './examples/container/loggingModule'
 
 const container = ContainerBuilder.create()
@@ -117,6 +128,6 @@ logger.info('Logging something!')
 
 Note that we shouuld only call [[IContainer.get]] from within a factory function or from the [composition root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/), avoiding the [service locator anti-pattern](https://freecontent.manning.com/the-service-locator-anti-pattern/).
 
-And that's it! Using the container we can build large and complex but loosely coupled applications from small, simple and easily testable components.
+And that's it - unlike some other DI containers that claim to be lightweight, tsinject really is tiny and has a simple API, allowing large and complex but loosely coupled applications to be built from small, simple and easily testable components.
 
 See the [examples](https://github.com/mgdigital/tsinject/tree/main/examples) folder for a more complete application. It includes a simple tasks service with a REST API that can be started with `yarn example:start`.
