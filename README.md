@@ -1,6 +1,6 @@
 # tsinject
 
-Lightweight and flexible dependency injection container for Typescript
+Lightweight and flexible dependency injection container for Typescript.
 
 [![npm version](https://badge.fury.io/js/@mgdigital%2Ftsinject.svg)](https://badge.fury.io/js/@mgdigital%2Ftsinject)
 
