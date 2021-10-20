@@ -7,7 +7,7 @@ import * as uuidModule from '../uuidModule'
 import * as keys from './keys'
 import InMemoryTaskRepository from '../../task/InMemoryTaskRepository'
 import TaskService from '../../task/TaskService'
-import tasksFastifyAppRouter from '../../task/tasksFastifyAppRouter'
+import taskFastifyAppRouter from '../../task/taskFastifyAppRouter'
 import runFastifyServer from '../../util/runFastifyServer'
 
 const taskModule: ContainerModule<
@@ -34,7 +34,7 @@ const taskModule: ContainerModule<
   )
   .define(
     keys.taskFastifyApp,
-    container => tasksFastifyAppRouter(
+    container => taskFastifyAppRouter(
       container.get(keys.taskService),
       Fastify()
     )

@@ -16,6 +16,12 @@ export type ServiceMap<
   [key in TKey]: T
 }
 
+/**
+ * Get the type of a service from a [[ServiceMap]], using its key.
+ *
+ * @typeParam TServices - The service map.
+ * @typeParam TKey - The service key.
+ */
 export type ServiceTypeOf<
   TServices extends ServiceMap,
   TKey extends keyof TServices
@@ -151,6 +157,8 @@ export type ContainerModule<
 
 /**
  * A map of container keys to factory functions (used internally).
+ *
+ * @internal
  */
 export type FactoryMap<
  TServiceMap extends ServiceMap = ServiceMap
