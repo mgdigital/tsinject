@@ -1,0 +1,29 @@
+extends:
+  # https://github.com/standard/eslint-config-standard-with-typescript
+  - 'standard-with-typescript'
+  # https://github.com/typescript-eslint/typescript-eslint/blob/master/docs/getting-started/linting/README.md
+  - 'plugin:@typescript-eslint/recommended-requiring-type-checking'
+plugins:
+  - eslint-plugin-tsdoc
+env:
+  commonjs: true
+  es6: true
+  node: true
+  jest: true
+globals:
+  Atomics: readonly
+  SharedArrayBuffer: readonly
+parserOptions:
+  ecmaVersion: 2019
+  project: './tsconfig.test.json'
+  sourceType: module
+rules:
+  '@typescript-eslint/consistent-type-assertions':
+    - 'error'
+    - { assertionStyle: 'as', objectLiteralTypeAssertions: 'allow-as-parameter' }
+  '@typescript-eslint/consistent-type-definitions': off
+  '@typescript-eslint/consistent-type-imports': error
+  '@typescript-eslint/indent': off
+  '@typescript-eslint/require-await': off
+  '@typescript-eslint/return-await': off
+  'tsdoc/syntax': error
