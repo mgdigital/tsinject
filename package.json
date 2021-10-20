@@ -22,8 +22,8 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "docs",
     "lib",
+    "CHANGELOG.md",
     "LICENSE",
     "README.md"
   ],
