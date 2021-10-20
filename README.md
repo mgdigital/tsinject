@@ -1,4 +1,4 @@
-# tsinject
+# @mgdigital/tsinject
 
 Lightweight and flexible dependency injection container for Typescript.
 
@@ -22,9 +22,9 @@ Several dependency injection solutions exist for TypeScript. Most use either dec
 
 **tsinject** adopts an alternative approach with several objectives:
 
-<span style="color:green">&check;</span> Flexibility and reusability of components
+<span style="color:green">&check;</span> Flexibility, composability and reusability of components
 
-<span style="color:green">&check;</span> Avoiding global side effects
+<span style="color:green">&check;</span> Sharing global resources while avoiding global side effects
 
 <span style="color:green">&check;</span> Achieving loose coupling in large applications
 
@@ -123,6 +123,14 @@ import * as loggingModule from './examples/container/loggingModule'
 
 const container = newContainerBuilder()
   .use(loggingModule.default)
+  // Decorate the logger config so that output is always pretty
+  .decorate(
+    loggingModule.keys.loggerConfig,
+    f => c => ({
+      ...f(c),
+      pretty: true
+    })
+  )
   .createContainer()
 
 const logger = container.get(loggingModule.keys.logger)
@@ -130,7 +138,7 @@ const logger = container.get(loggingModule.keys.logger)
 logger.info('Logging something!')
 ```
 
-Note that we shouuld only call [[IContainer.get]] from within a factory function or from the [composition root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/), avoiding the [service locator anti-pattern](https://freecontent.manning.com/the-service-locator-anti-pattern/).
+Note that we should only call [IContainer.get](https://mgdigital.github.io/tsinject/interfaces/IContainer.html#get) from within a factory function or from the [composition root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/), avoiding the [service locator anti-pattern](https://freecontent.manning.com/the-service-locator-anti-pattern/).
 
 And that's it - unlike some other DI containers that claim to be lightweight, tsinject really is tiny and has a simple API, allowing large and complex but loosely coupled applications to be built from small, simple and easily testable components.
 
