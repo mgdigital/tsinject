@@ -71,13 +71,16 @@ const loggingModule: ContainerModule<
   processEnvModule.services &
   LoggingServices
 > = builder => builder
+  // Use another container module that provides services required by this one
   .use(processEnvModule.default)
+  // Define a config object based on environment variables
   .define(
     keys.loggerConfig,
     container => loggerConfigFromEnv(
       container.get(processEnvModule.keys.processEnv)
     )
   )
+  // Provide a different implementation depending on environment variable configuration
   .define(
     keys.logFormatter,
     container => container.get(keys.loggerConfig).pretty
@@ -103,7 +106,7 @@ export default loggingModule
 We can now create a container from this module, get the logger service from the container and log something:
 
 ```typescript
-import type { ContainerBuilder } from '@mgdigital/tsinject'
+import { newContainerBuilder } from '@mgdigital/tsinject'
 import * as loggingModule from './examples/container/loggingModule'
 
 const container = ContainerBuilder.create()
