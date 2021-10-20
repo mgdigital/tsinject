@@ -4,7 +4,7 @@ Lightweight and flexible dependency injection container for Typescript
 
 ## Motivation
 
-Several dependency injection solutions exist for TypeScript. Most use either decorators (Inversify; TSyringe) or static class properties (Angular). This has several drawbacks:
+Several dependency injection solutions exist for TypeScript. Most use either decorators ([Inversify](https://github.com/inversify/InversifyJS); [TSyringe](https://github.com/microsoft/tsyringe)) or static class properties (Angular). This has several drawbacks:
 
 - The types of service that can be defined are restricted to class instances.
 - The code of the class needs modifying to work with the container (e.g. by adding decorators or static properties).
@@ -12,11 +12,11 @@ Several dependency injection solutions exist for TypeScript. Most use either dec
 
 tsinject adopts an alternative approach with several objectives:
 
-### Flexibility
+- Flexibility and reusability of components
+- Avoiding global side effects
+- Achieving loose coupling in large applications
 
 tsinject works by defining named factory functions in a container builder, with unique symbols mapping services available in the container to their type. These factory functions can return anything, allowing configuration objects, class instances, functions or any other type of value to be defined as a container service. Any code can be containerized without need for modifications such as annotations or static properties.
-
-### Avoiding global side effects
 
 Any application that does something useful needs to cause side effects. These might include:
 
@@ -27,76 +27,96 @@ Any application that does something useful needs to cause side effects. These mi
 
 These capabilities are implemented by components of the application, with some components depending on others, and with the implementation or configuration of components often depending on values read from the environment. The quickest way to allow components to communicate with each other is often via globally defined singleton instances. This increases complexity, making code more difficult to debug, test and maintain. Instead, by building components that have their dependencies injected, we can create complex but decoupled applications.
 
-Take the simple example of a timer, that has this type signature:
+## Usage
+
+Take the example of a logging component, that defines services in a container using the following keys (see [./examples/container/loggingModule/keys.ts](https://github.com/mgdigital/tsinject/blob/main/examples/container/loggingModule/keys.ts)):
 
 ```typescript
-type HighResTimer = () => () => number
+export const loggerConfig = Symbol('loggerConfig') // Provides config values for other logger services
+export const logFormatter = Symbol('logFormatter') // Formats log data to a log line string
+export const logWriter = Symbol('logWriter') // Writes log lines, e.g. to the console or to a file
+export const logger = Symbol('logger') // The logger service that will be used by consumers of this component
 ```
 
-When we call the timer, it records the current microtime, and returns a function that when called, subtracts it from the microtime at that moment, thereby returning the duration between the 2 function calls. To time this duration, we must read the start and end time from the system clock. When we come to test our code, we have a problem because the function is not deterministic. The side effect being caused is inaccessible from the code of our test, so we'll have to either use monkey-patching to spoof the current time, or start a separate timer and test that the result is only roughly correct.
-
-Consider this implementation. Firstly, the side effect (a function that gets the current high resolution time) is implemented in isolation:
+We can make a map of container keys to the type of service they represent (see [./examples/container/loggingModule/services.ts](https://github.com/mgdigital/tsinject/blob/main/examples/container/loggingModule/services.ts)):
 
 ```typescript
-type GetHighResTime = () => bigint
+import type { ILogger, LogFormatter, LoggerConfig, LogWriter } from '../../logging/types'
+import type * as keys from './keys'
 
-const getHighResTime: GetHighResTime = () =>
-  process.hrtime.bigint()
-```
-
-The timer function can now be implemented with an injected system clock, and avoids causing a global side effect:
-
-```typescript
-const highResTimer = (getHighResTime: GetHighResTime): HighResTimer => () => {
-  const startTime = getHighResTime()
-  return () => Number(getHighResTime() - startTime)
+type LoggingServices = {
+  [keys.loggerConfig]: LoggerConfig
+  [keys.logFormatter]: LogFormatter
+  [keys.logWriter]: LogWriter
+  [keys.logger]: ILogger
 }
+
+export default LoggingServices
 ```
 
-This makes our test implementation relatively simple:
+We can then create a [[ContainerModule]] by defining a factory function for each service key (see [./examples/container/loggingModule/module.ts](https://github.com/mgdigital/tsinject/blob/main/examples/container/loggingModule/module.ts)):
 
 ```typescript
-const startTime = BigInt(Math.pow(11, 14)) // Some number roughly as large as the current microtime
-const duration = 1234
-const endTime = startTime + BigInt(duration)
-const getHighResTime = jest.fn() // Create a mock timer that will supply the start and end time
-  .mockReturnValueOnce(startTime)
-  .mockReturnValueOnce(endTime)
-const startTimer = highResTimer(getHighResTime)
-const getDuration = startTimer() // The timer is started at `startTime`
-expect(getDuration()).toEqual(duration) // `getDuration` returns the correct duration based on the `endTime`
-```
-
-To define this component as a container module, we create globally unique keys (in `keys.ts`) that represent the services provided by the module:
-
-```typescript
-export const getHighResTime = Symbol('getHighResTime')
-export const highResTimer = Symbol('highResTimer')
-```
-
-And we create a [[ServiceMap]] for the module, mapping the keys to the service types they represent:
-
-```typescript
+import type { ContainerModule } from '@mgdigital/tsinject'
+import type LoggingServices from './services'
+import * as processEnvModule from '../processEnvModule'
 import * as keys from './keys'
+import consoleLogWriter from '../../logging/consoleLogWriter'
+import Logger from '../../logging/Logger'
+import loggerConfigFromEnv from '../../logging/config/loggerConfigFromEnv'
+import prettyLogFormatter from '../../logging/prettyLogFormatter'
+import simpleLogFormatter from '../../logging/simpleLogFormatter'
 
-export type ServiceMap = {
-  [keys.getHighResTime]: GetHighResTime
-  [keys.highResTimer]: HighResTimer
-}
-```
-
-We can now declare a resusable [[ContainerModule]]:
-
-```typescript
-const containerModule: ContainerModule<ServiceMap> = builder => builder
+const loggingModule: ContainerModule<
+  processEnvModule.services &
+  LoggingServices
+> = builder => builder
+  .use(processEnvModule.default)
   .define(
-    keys.getHighResTime,
-    () => utils.getHighResTime
-  )
-  .define(
-    keys.highResTimer,
-    container => utils.highResTimer(
-      container.get(keys.getHighResTime)
+    keys.loggerConfig,
+    container => loggerConfigFromEnv(
+      container.get(processEnvModule.keys.processEnv)
     )
   )
+  .define(
+    keys.logFormatter,
+    container => container.get(keys.loggerConfig).pretty
+      ? prettyLogFormatter
+      : simpleLogFormatter
+  )
+  .define(
+    keys.logWriter,
+    () => consoleLogWriter
+  )
+  .define(
+    keys.logger,
+    container => new Logger(
+      container.get(keys.logFormatter),
+      container.get(keys.logWriter),
+      container.get(keys.loggerConfig).level
+    )
+  )
+
+export default loggingModule
 ```
+
+We can now create a container from this module, get the logger service from the container and log something:
+
+```typescript
+import type { ContainerBuilder } from '@mgdigital/tsinject'
+import * as loggingModule from './examples/container/loggingModule'
+
+const container = ContainerBuilder.create()
+  .use(loggingModule)
+  .createContainer()
+
+const logger = container.get(loggingModule.keys.logger)
+
+logger.info('Logging something!')
+```
+
+Note that we shouuld only call [[IContainer.get]] from within a factory function or from the [composition root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/), avoiding the [service locator anti-pattern](https://freecontent.manning.com/the-service-locator-anti-pattern/).
+
+And that's it! Using the container we can build large and complex but loosely coupled applications from small, simple and easily testable components.
+
+See the [examples](https://github.com/mgdigital/tsinject/tree/main/examples) folder for a more complete application. It includes a simple tasks service with a REST API that can be started with `yarn example:start`.
