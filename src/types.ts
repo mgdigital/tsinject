@@ -25,7 +25,7 @@ export type ServiceTypeOf<
 /**
  * Container interface.
  *
- * @typeParam TServiceMap - The [[ContainerServiceMap]] of the container.
+ * @typeParam TServiceMap - The [[ServiceMap]] of the container.
  */
 export interface IContainer<
   TServiceMap extends ServiceMap = ServiceMap
@@ -65,7 +65,7 @@ export interface IContainer<
 /**
  * Container builder interface.
  *
- * @typeParam TServiceMap - The [[ContainerServiceMap]] of services currently defined in the builder.
+ * @typeParam TServiceMap - The [[ServiceMap]] of services currently defined in the builder.
  */
 export interface IContainerBuilder<
   TServiceMap extends ServiceMap = ServiceMap
@@ -88,7 +88,7 @@ export interface IContainerBuilder<
    * Decorate a service already defined in the builder.
    *
    * @typeParam TKey - The container key of the service.
-   * @typeParam TTServiceMap - The [[ContainerServiceMap]] of services required by the service.
+   * @typeParam TTServiceMap - The [[ServiceMap]] of services required by the service.
    */
   decorate: <
     TKey extends keyof TTServiceMap = keyof TServiceMap,
@@ -101,7 +101,7 @@ export interface IContainerBuilder<
   /**
    * Use a [[ContainerModule]] in this builder.
    *
-   * @typeParam TModuleServices - The [[ContainerServiceMap]] of services provided by the module.
+   * @typeParam TModuleServices - The [[ServiceMap]] of services provided by the module.
    */
   use: <
     TModuleServices extends ServiceMap
@@ -119,7 +119,7 @@ export interface IContainerBuilder<
  * A function that can create a service using a container of its dependencies.
  *
  * @typeParam T - The type of the service.
- * @typeParam TServiceMap - The type of the [[ContainerServiceMap]] that the service depends on.
+ * @typeParam TServiceMap - The type of the [[ServiceMap]] that the service depends on.
  */
  export type Factory<
  T,
@@ -138,8 +138,8 @@ export type Decorator<
 /**
  * A container module encapsulates one or more calls to an [[IContainerBuilder]] as a reusable component.
  *
- * @typeParam TProvidedServices - The type of the [[ContainerServiceMap]] being provided by the module.
- * @typeParam TRequiredServices - The type of the [[ContainerServiceMap]] that the module depends on.
+ * @typeParam TProvidedServices - The type of the [[ServiceMap]] being provided by the module.
+ * @typeParam TRequiredServices - The type of the [[ServiceMap]] that the module depends on.
  * @param builder - A [[ContainerBuilder]] instance with the required services defined.
  * @returns A [[ContainerBuilder]] instance with the provided services defined.
  */
