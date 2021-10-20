@@ -122,7 +122,7 @@ import { newContainerBuilder } from '@mgdigital/tsinject'
 import * as loggingModule from './examples/container/loggingModule'
 
 const container = newContainerBuilder()
-  .use(loggingModule)
+  .use(loggingModule.default)
   .createContainer()
 
 const logger = container.get(loggingModule.keys.logger)
