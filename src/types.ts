@@ -18,9 +18,9 @@ export type ServiceMap<
 
 export type ServiceTypeOf<
   TServices extends ServiceMap,
-  TSymbol extends keyof TServices
+  TKey extends keyof TServices
 > =
-  TServices[TSymbol] extends infer T ? T : never
+  TServices[TKey] extends infer T ? T : never
 
 /**
  * Container interface.
@@ -155,5 +155,5 @@ export type ContainerModule<
 export type FactoryMap<
  TServiceMap extends ServiceMap = ServiceMap
 > = {
- [key in keyof TServiceMap]: Factory<TServiceMap[key], TServiceMap>
+ [key in keyof TServiceMap]: Factory<ServiceTypeOf<TServiceMap, key>, TServiceMap>
 }
