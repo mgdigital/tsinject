@@ -2,6 +2,12 @@
 
 Lightweight and flexible dependency injection container for Typescript
 
+## Documentation
+
+Install with `npm add @mgdigital/tsinject` or `yarn add @mgdigital/tsinject`.
+
+See [the documentation](https://mgdigital.github.io/tsinject/).
+
 ## Motivation
 
 Several dependency injection solutions exist for TypeScript. Most use either decorators ([Inversify](https://github.com/inversify/InversifyJS); [TSyringe](https://github.com/microsoft/tsyringe)) or static class properties (Angular). This has several drawbacks:
@@ -120,6 +126,6 @@ logger.info('Logging something!')
 
 Note that we shouuld only call [[IContainer.get]] from within a factory function or from the [composition root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/), avoiding the [service locator anti-pattern](https://freecontent.manning.com/the-service-locator-anti-pattern/).
 
-And that's it! Using the container we can build large and complex but loosely coupled applications from small, simple and easily testable components.
+And that's it - unlike some other DI containers that claim to be lightweight, tsinject really is tiny and has a simple API, allowing large and complex but loosely coupled applications to be built from small, simple and easily testable components.
 
 See the [examples](https://github.com/mgdigital/tsinject/tree/main/examples) folder for a more complete application. It includes a simple tasks service with a REST API that can be started with `yarn example:start`.
