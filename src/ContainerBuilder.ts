@@ -13,6 +13,8 @@ import Container from './Container'
 
 /**
  * Default implementation for [[IContainerBuilder]].
+ *
+ * @internal
  */
 class ContainerBuilder<TServiceMap extends ServiceMap>
 implements IContainerBuilder<TServiceMap> {

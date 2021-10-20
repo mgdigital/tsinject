@@ -15,7 +15,7 @@ type GetterMap<TServiceMap extends ServiceMap = ServiceMap> = {
 /**
  * Default implementation for [[IContainer]].
  *
- * @hidden
+ * @internal
  */
 class Container<TServiceMap extends ServiceMap> implements IContainer<TServiceMap> {
   private readonly getters: GetterMap<TServiceMap>
