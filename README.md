@@ -14,15 +14,19 @@ See [the documentation](https://mgdigital.github.io/tsinject/).
 
 Several dependency injection solutions exist for TypeScript. Most use either decorators ([Inversify](https://github.com/inversify/InversifyJS); [TSyringe](https://github.com/microsoft/tsyringe)) or static class properties (Angular). This has several drawbacks:
 
-- The types of service that can be defined are restricted to class instances.
-- The code of the class needs modifying to work with the container (e.g. by adding decorators or static properties).
-- It will only work with the `expermentalDecorators` option enabled.
+<span style="color:red">&cross;</span> The types of service that can be defined are restricted to class instances.
 
-tsinject adopts an alternative approach with several objectives:
+<span style="color:red">&cross;</span> The code of the class needs modifying to work with the container (e.g. by adding decorators or static properties).
 
-- Flexibility and reusability of components
-- Avoiding global side effects
-- Achieving loose coupling in large applications
+<span style="color:red">&cross;</span> It will only work with the `experimentalDecorators` option enabled.
+
+**tsinject** adopts an alternative approach with several objectives:
+
+<span style="color:green">&check;</span> Flexibility and reusability of components
+
+<span style="color:green">&check;</span> Avoiding global side effects
+
+<span style="color:green">&check;</span> Achieving loose coupling in large applications
 
 tsinject works by defining named factory functions in a container builder, with unique symbols mapping services available in the container to their type. These factory functions can return anything, allowing configuration objects, class instances, functions or any other type of value to be defined as a container service. Any code can be containerized without need for modifications such as annotations or static properties.
 
