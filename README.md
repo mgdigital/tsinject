@@ -117,7 +117,7 @@ We can now create a container from this module, get the logger service from the 
 import { newContainerBuilder } from '@mgdigital/tsinject'
 import * as loggingModule from './examples/container/loggingModule'
 
-const container = ContainerBuilder.create()
+const container = newContainerBuilder()
   .use(loggingModule)
   .createContainer()
 
