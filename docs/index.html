@@ -15,17 +15,13 @@
   <h2>Motivation</h2>
 </a>
 <p>Several dependency injection solutions exist for TypeScript. Most use either decorators (<a href="https://github.com/inversify/InversifyJS">Inversify</a>; <a href="https://github.com/microsoft/tsyringe">TSyringe</a>) or static class properties (Angular). This has several drawbacks:</p>
-<ul>
-<li>The types of service that can be defined are restricted to class instances.</li>
-<li>The code of the class needs modifying to work with the container (e.g. by adding decorators or static properties).</li>
-<li>It will only work with the <code>expermentalDecorators</code> option enabled.</li>
-</ul>
-<p>tsinject adopts an alternative approach with several objectives:</p>
-<ul>
-<li>Flexibility and reusability of components</li>
-<li>Avoiding global side effects</li>
-<li>Achieving loose coupling in large applications</li>
-</ul>
+<p><span style="color:red">&cross;</span> The types of service that can be defined are restricted to class instances.</p>
+<p><span style="color:red">&cross;</span> The code of the class needs modifying to work with the container (e.g. by adding decorators or static properties).</p>
+<p><span style="color:red">&cross;</span> It will only work with the <code>experimentalDecorators</code> option enabled.</p>
+<p><strong>tsinject</strong> adopts an alternative approach with several objectives:</p>
+<p><span style="color:green">&check;</span> Flexibility and reusability of components</p>
+<p><span style="color:green">&check;</span> Avoiding global side effects</p>
+<p><span style="color:green">&check;</span> Achieving loose coupling in large applications</p>
 <p>tsinject works by defining named factory functions in a container builder, with unique symbols mapping services available in the container to their type. These factory functions can return anything, allowing configuration objects, class instances, functions or any other type of value to be defined as a container service. Any code can be containerized without need for modifications such as annotations or static properties.</p>
 <p>Any application that does something useful needs to cause side effects. These might include:</p>
 <ul>
