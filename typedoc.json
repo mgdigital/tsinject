@@ -1,0 +1,9 @@
+{
+  "entryPoints": [
+    "./src"
+  ],
+  "out": "docs",
+  "includeVersion": true,
+  "treatWarningsAsErrors": true,
+  "gitRevision": "main"
+}

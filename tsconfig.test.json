@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "node",
+      "jest"
+    ],
+    "paths": {
+      "@mgdigital/tsinject": ["./src"]
+    }
+  },
+  "include": [
+    "examples/**/*.ts",
+    "src/**/*.ts",
+    "test/**/*.ts"
+  ]
+}
