@@ -1,6 +1,6 @@
 {
   "name": "@mgdigital/tsinject",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mgdigital/tsinject.git"
@@ -8,16 +8,16 @@
   "author": "Mike Gibson",
   "license": "MIT",
   "scripts": {
-    "prepare": "husky install",
-    "lint": "eslint src test examples",
-    "test": "jest",
+    "prepare": "yarn husky install",
+    "lint": "yarn eslint src test examples",
+    "test": "yarn jest",
     "check": "yarn check:compile && yarn lint && yarn check:generate-docs && yarn test",
     "check:compile": "tsc --project tsconfig.test.json --noEmit",
-    "check:generate-docs": "typedoc --emit none",
-    "compile": "rimraf lib && mkdirp lib && tsc --project tsconfig.build.json",
-    "generate-docs": "rimraf docs && typedoc",
+    "check:generate-docs": "yarn typedoc --emit none",
+    "compile": "yarn rimraf lib && yarn mkdirp lib && tsc --project tsconfig.build.json",
+    "generate-docs": "yarn rimraf docs && yarn typedoc",
     "build": "yarn compile && yarn generate-docs",
-    "example:start": "ts-node ./examples/runTaskServer"
+    "example:start": "yarn ts-node ./examples/runTaskServer"
   },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
