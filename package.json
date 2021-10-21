@@ -1,12 +1,21 @@
 {
   "name": "@mgdigital/tsinject",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mgdigital/tsinject.git"
   },
   "author": "Mike Gibson",
   "license": "MIT",
+  "keywords": [
+    "dependency injection",
+    "dependency",
+    "injection",
+    "ioc",
+    "container",
+    "javascript",
+    "typescript"
+  ],
   "scripts": {
     "prepare": "yarn husky install",
     "lint": "yarn eslint src test examples",
