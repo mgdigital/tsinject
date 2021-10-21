@@ -5,9 +5,9 @@
  * @returns The memoized function.
  */
 const memoize = <T>(fn: () => T): () => T => {
-  let result: { value: T } | undefined
+  let result: { value: T } | null = null
   return () => {
-    if (result === undefined) {
+    if (result === null) {
       result = { value: fn() }
     }
     return result.value
