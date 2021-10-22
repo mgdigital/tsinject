@@ -213,4 +213,4 @@ See the [examples](https://github.com/mgdigital/tsinject/tree/main/examples) fol
 
 ---
 
-Copyright (c) 2021 Mike Gibson, https://github.com/mgdigital.
+Copyright (c) 2021 Mike Gibson, https://github.com/mgdigital
