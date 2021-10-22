@@ -143,3 +143,7 @@ Note that we should only call [IContainer.get](https://mgdigital.github.io/tsinj
 And that's it - unlike some other DI containers that claim to be lightweight, tsinject really is tiny and has a simple API, allowing large and complex but loosely coupled applications to be built from small, simple and easily testable components.
 
 See the [examples](https://github.com/mgdigital/tsinject/tree/main/examples) folder for a more complete application. It includes a simple tasks service with a REST API that can be started by cloning this repository and running `yarn install`, `yarn build` then `yarn example:start`.
+
+---
+
+Copyright (c) 2021 Mike Gibson, https://github.com/mgdigital.
