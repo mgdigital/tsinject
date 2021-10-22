@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.2]
+
+- Add `containerKeyValues` method
+
 ## [0.2.1]
 
 - Change behaviour of `IContainerBuilder.define` so that already-defined services are not overwritten
