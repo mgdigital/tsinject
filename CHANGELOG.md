@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.1]
+
+- Change behaviour of `IContainerBuilder.define` so that already-defined services are not overwritten
+
 ## [0.1.16]
 
 - Fix type signature of `IContainerBuilder.use` method

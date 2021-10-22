@@ -33,6 +33,9 @@ implements IContainerBuilder<TServiceMap> {
     key: TKey,
     factory: Factory<TService, TServiceMap>
    ): IContainerBuilder<TServiceMap & { [key in TKey]: TService }> {
+    if (key in this.factories) {
+      return this
+    }
     return new ContainerBuilder({
       ...this.factories,
       [key]: factory
@@ -46,12 +49,12 @@ implements IContainerBuilder<TServiceMap> {
     key: TKey,
     decorator: Decorator<TTServiceMap, TKey>
   ): IContainerBuilder<TServiceMap> {
-    return this.define(
-      key as ContainerKey,
-      decorator(
+    return new ContainerBuilder({
+      ...this.factories,
+      [key]: decorator(
         this.factories[key as ContainerKey] as Factory<ServiceTypeOf<TTServiceMap, TKey>>
       )
-    )
+    })
   }
 
   use <

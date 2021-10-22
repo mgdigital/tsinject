@@ -16,6 +16,10 @@ describe('Container', () => {
         'foo',
         () => 'bar'
       )
+      .define(
+        'foo',
+        () => 'foo'
+      )
       .createContainer()
     expect(container.keys).toEqual([
       processEnvModule.keys.processEnv,
