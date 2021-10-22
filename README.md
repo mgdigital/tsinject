@@ -173,38 +173,73 @@ const myCustomLoggingModule: ContainerModule<
   )
 ```
 
-We can also use decorators to achieve features that aren't explicitly implemented in this library, such as service tagging, which we can do by defining a service as an array:
+We can also use decorators to achieve features that aren't explicitly implemented in this library, such as service tagging, which we can do by defining a service as a key-value object (actually, a simple array might do for some cases but using key-values prevents accidental duplicates if modules are reused):
 
 ```typescript
-import type { ContainerModule } from '@mgdigital/tsinject'
+import type { ContainerKey, ContainerModule } from '@mgdigital/tsinject'
+import { containerKeyValues } from '@mgdigital/tsinject'
 
-type TaggedServiceType = { foo: string }
+// Assume a type of service that we wish to tag, along with a sevice that depends on the tagged services.
 
-const serviceTag = Symbol('serviceTag')
+class TaggedService {}
 
-type ServiceMap = {
-  [serviceTag]: TaggedServiceType[]
+class TaggedServiceConsumer {
+  constructor (
+    public readonly taggedServices: TaggedService[]
+  ) {}
 }
 
-const myModule: ContainerModule<
-  ServiceMap
+const serviceTag = Symbol('serviceTag')
+const taggedServiceConsumer = Symbol('taggedServiceConsumer')
+
+type ParentModuleServiceMap = {
+  // `TaggedServiceConsumer` depends on an array, but using an object here prevents accidental duplicates.
+  [serviceTag]: Record<ContainerKey, TaggedService>
+  [taggedServiceConsumer]: TaggedServiceConsumer
+}
+
+const parentModule: ContainerModule<
+  ParentModuleServiceMap
 > = builder => builder
+  // Define an empty object of tagged services
   .define(
     serviceTag,
-    () => []
+    () => ({})
+  )
+  .define(
+    taggedServiceConsumer,
+    container => new TaggedServiceConsumer(
+      // This utility method converts the tagged service object to an array
+      containerKeyValues(
+        container.get(serviceTag)
+      )
+    )
   )
 
-const myOtherModule: ContainerModule<
-  ServiceMap
+// Then define child modules that will provide tagged services
+
+const taggedService = Symbol('taggedService')
+
+type ChildModuleServiceMap = {
+  [taggedService]: TaggedService
+}
+
+const childModule: ContainerModule<
+  ParentModuleServiceMap &
+  ChildModuleServiceMap
 > = builder => builder
-  .use(myModule)
+  .use(parentModule)
+  .define(
+    taggedService,
+    () => new TaggedService()
+  )
   .decorate(
     serviceTag,
     // Add a service to the array of already tagged services
-    factory => container => [
+    factory => container => ({
       ...factory(container),
-      { foo: 'bar' }
-    ]
+      [taggedService]: container.get(taggedService)
+    })
   )
 ```
 
