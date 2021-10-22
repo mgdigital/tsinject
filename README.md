@@ -2,7 +2,7 @@
 
 Lightweight and flexible dependency injection container for TypeScript.
 
-[![npm version](https://badge.fury.io/js/@mgdigital%2Ftsinject.svg)](https://badge.fury.io/js/@mgdigital%2Ftsinject) [![codecov](https://codecov.io/gh/mgdigital/tsinject/branch/main/graph/badge.svg)](https://codecov.io/gh/mgdigital/tsinject)
+[![npm version](https://badge.fury.io/js/@mgdigital%2Ftsinject.svg)](https://badge.fury.io/js/@mgdigital%2Ftsinject) [![codecov](https://codecov.io/gh/mgdigital/tsinject/branch/main/graph/badge.svg)](https://codecov.io/gh/mgdigital/tsinject) [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/mgdigital/tsinject.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/mgdigital/tsinject/context:javascript)
 
 ## Documentation
 
