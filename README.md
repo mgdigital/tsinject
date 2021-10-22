@@ -41,6 +41,8 @@ These capabilities are implemented by components of the application, with some c
 
 ## Usage
 
+### Creating a container module and defining services
+
 Take the example of a logging component, that defines services in a container using the following keys (see [./examples/container/loggingModule/keys.ts](https://github.com/mgdigital/tsinject/blob/main/examples/container/loggingModule/keys.ts)):
 
 ```typescript
@@ -138,7 +140,72 @@ const logger = container.get(loggingModule.keys.logger)
 logger.info('Logging something!')
 ```
 
-Note that we should only call [IContainer.get](https://mgdigital.github.io/tsinject/interfaces/IContainer.html#get) from within a factory function or from the [composition root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/), avoiding the [service locator anti-pattern](https://freecontent.manning.com/the-service-locator-anti-pattern/).
+**Note:** We should only call [IContainer.get](https://mgdigital.github.io/tsinject/interfaces/IContainer.html#get) from within a factory function or from the [composition root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/), avoiding the [service locator anti-pattern](https://freecontent.manning.com/the-service-locator-anti-pattern/).
+
+**Note:** When defining a service in the container, if that service key is already defined then the key will **not** be overwritten. This allows modules to be used multiple times without introducing unpredictable behaviour when using decorators. For example of module A and B both depend on module C they can both use module C and then be used together in the same container. If an already defined service needs to be overwritten, this can be done with a decorator.
+
+## Decorators
+
+Decorators allow us to modify an already-defined service. Let's create a custom logging module that decorates some of the services in the base module defined above:
+
+
+```typescript
+import type { ContainerModule } from '@mgdigital/tsinject'
+import loggingModule from './examples/container/loggingModule'
+
+const myCustomLoggingModule: ContainerModule<
+  loggingModule.services
+> = builder => builder
+  .use(loggingModule.default)
+  // Decorate the logger config so that output is always pretty
+  .decorate(
+    loggingModule.keys.loggerConfig,
+    factory => container => ({
+      ...factory(container),
+      pretty: true
+    })
+  )
+  // Overwrite the log writer with some other implementation
+  .decorate(
+    loggingModule.keys.logWriter,
+    () => () => myCustomLogWriter
+  )
+```
+
+We can also use decorators to achieve features that aren't explicitly implemented in this library, such as service tagging:
+
+```typescript
+import type { ContainerModule } from '@mgdigital/tsinject'
+
+type TaggedServiceType = { foo: string }
+
+const serviceTag = Symbol(serviceTag)
+
+type ServiceMap = {
+  [serviceTag]: TaggedServiceType
+}
+
+const myModule: ContainerModule<
+  ServiceMap
+> = builder => builder
+  .define(
+    serviceTag,
+    () => []
+  )
+
+const myOtherModule: ContainerModule<
+  ServiceMap
+> = builder => builder
+  .use(myModule)
+  .decorate(
+    serviceTag,
+    // Add a service to the array of already defined services
+    factory => container => [
+      ...factory(container),
+      { foo: 'bar' }
+    ]
+  )
+```
 
 And that's it - unlike some other DI containers that claim to be lightweight, tsinject really is tiny and has a simple API, allowing large and complex but loosely coupled applications to be built from small, simple and easily testable components.
 

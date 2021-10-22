@@ -79,8 +79,10 @@ export interface IContainerBuilder<
   /**
    * Define a service in the container builder.
    *
-   * @typeParam TKey - The container key of the service.
+   * @typeParam TKey - The type of the container key of the service being defined.
    * @typeParam TService - The type of the service being defined.
+   * @param key - The key of the service being defined.
+   * @param factory - The service [[Factory]].
    */
   define: <
     TKey extends ContainerKey = ContainerKey,
