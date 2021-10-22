@@ -3,6 +3,7 @@
  *
  * @param fn - The function to be memoized.
  * @returns The memoized function.
+ * @internal
  */
 const memoize = <T>(fn: () => T): () => T => {
   let result: { value: T } | null = null
