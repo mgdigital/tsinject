@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.16]
+
+- Fix type signature of `IContainerBuilder.use` method
+
 ## [0.1.15]
 
 - Add keywords to package.json

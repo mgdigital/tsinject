@@ -55,8 +55,11 @@ implements IContainerBuilder<TServiceMap> {
   }
 
   use <
-    TModuleServices extends ServiceMap
-  >(module: ContainerModule<TModuleServices, TServiceMap>): IContainerBuilder<TServiceMap & TModuleServices> {
+    TModuleServices extends ServiceMap,
+    TRequiredServices extends TServiceMap = TServiceMap
+  >(
+    module: ContainerModule<TModuleServices, TRequiredServices>
+  ): IContainerBuilder<TServiceMap & TModuleServices> {
     return module(this)
   }
 
