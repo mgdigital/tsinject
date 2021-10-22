@@ -108,11 +108,13 @@ export interface IContainerBuilder<
    * Use a [[ContainerModule]] in this builder.
    *
    * @typeParam TModuleServices - The [[ServiceMap]] of services provided by the module.
+   * @typeParam TRequiredServices - The [[ServiceMap]] of services required by the module.
    */
   use: <
-    TModuleServices extends ServiceMap
+    TModuleServices extends ServiceMap,
+    TRequiredServices extends TServiceMap = TServiceMap
   >(
-    module: ContainerModule<TModuleServices, TServiceMap>
+    module: ContainerModule<TModuleServices, TRequiredServices>
   ) => IContainerBuilder<TServiceMap & TModuleServices>
 
   /**
@@ -144,8 +146,8 @@ export type Decorator<
 /**
  * A container module encapsulates one or more calls to an [[IContainerBuilder]] as a reusable component.
  *
- * @typeParam TProvidedServices - The type of the [[ServiceMap]] being provided by the module.
- * @typeParam TRequiredServices - The type of the [[ServiceMap]] that the module depends on.
+ * @typeParam TModuleServices - The [[ServiceMap]] of services provided by the module.
+ * @typeParam TRequiredServices - The [[ServiceMap]] of services required by the module.
  * @param builder - A [[ContainerBuilder]] instance with the required services defined.
  * @returns A [[ContainerBuilder]] instance with the provided services defined.
  */
