@@ -2,7 +2,7 @@
 
 ## [0.2.2]
 
-- Add `containerKeyValues` method
+- Add `containerKeyValues` function
 
 ## [0.2.1]
 
