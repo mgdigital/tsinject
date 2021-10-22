@@ -134,7 +134,7 @@ logger.info('Logging something!')
 
 **Note:** We should only call [IContainer.get](https://mgdigital.github.io/tsinject/interfaces/IContainer.html#get) from within a factory function or from the [composition root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/), avoiding the [service locator anti-pattern](https://freecontent.manning.com/the-service-locator-anti-pattern/).
 
-**Note:** When defining a service in the container, if that service key is already defined then the key will **not** be overwritten. This allows modules to be used multiple times without introducing unpredictable behaviour when using decorators. For example of module A and B both depend on module C they can both use module C and then be used together module D, where they will share the same dependency instance from module C. If an already defined service needs to be overwritten, this can be done with a decorator.
+**Note:** When defining a service in the container, if that service key is already defined then the key will **not** be overwritten. This allows modules to be used multiple times without introducing unpredictable behaviour when using decorators. For example, if modules A and B both depend on module C, they can both use module C, and then be used together module D, where they will share the same dependency instance from module C. If an already defined service needs to be overwritten, this can be done with a decorator.
 
 ### Decorators
 
