@@ -125,14 +125,6 @@ import * as loggingModule from './examples/container/loggingModule'
 
 const container = newContainerBuilder()
   .use(loggingModule.default)
-  // Decorate the logger config so that output is always pretty
-  .decorate(
-    loggingModule.keys.loggerConfig,
-    f => c => ({
-      ...f(c),
-      pretty: true
-    })
-  )
   .createContainer()
 
 const logger = container.get(loggingModule.keys.logger)
