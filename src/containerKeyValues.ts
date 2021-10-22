@@ -8,7 +8,7 @@ import { containerKeys } from '.'
  * @param obj - The object to extract the values from.
  * @returns The extracted values.
  */
-const containerKeyValues = <T>(obj: Record<ContainerKey, T>): T[] =>
+const containerKeyValues = <T = unknown>(obj: Record<ContainerKey, T>): T[] =>
   containerKeys(obj)
     .map(key => obj[key])
 
