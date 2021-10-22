@@ -172,17 +172,17 @@ const myCustomLoggingModule: ContainerModule<
   )
 ```
 
-We can also use decorators to achieve features that aren't explicitly implemented in this library, such as service tagging:
+We can also use decorators to achieve features that aren't explicitly implemented in this library, such as service tagging, which we can do by defining a service as an array:
 
 ```typescript
 import type { ContainerModule } from '@mgdigital/tsinject'
 
 type TaggedServiceType = { foo: string }
 
-const serviceTag = Symbol(serviceTag)
+const serviceTag = Symbol('serviceTag')
 
 type ServiceMap = {
-  [serviceTag]: TaggedServiceType
+  [serviceTag]: TaggedServiceType[]
 }
 
 const myModule: ContainerModule<
