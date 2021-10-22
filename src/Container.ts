@@ -54,7 +54,7 @@ class Container<TServiceMap extends ServiceMap> implements IContainer<TServiceMa
   >(
     key: TKey
   ): this is IContainer<{ [k in TKey]: ServiceTypeOf<TServiceMap, TKey> }> {
-    return this.keys.includes(key as ContainerKey)
+    return key in this.getters
   }
 }
 

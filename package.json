@@ -1,6 +1,6 @@
 {
   "name": "@mgdigital/tsinject",
-  "version": "0.1.16",
+  "version": "0.2.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mgdigital/tsinject.git"
