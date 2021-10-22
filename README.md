@@ -235,7 +235,7 @@ const childModule: ContainerModule<
   )
   .decorate(
     serviceTag,
-    // Add a service to the array of already tagged services
+    // Add a service to the already tagged services
     factory => container => ({
       ...factory(container),
       [taggedService]: container.get(taggedService)
