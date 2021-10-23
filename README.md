@@ -28,7 +28,7 @@ Several dependency injection solutions exist for TypeScript. Most use either dec
 
 <span style="color:green">&check;</span> Achieving loose coupling in large applications
 
-tsinject works by defining named factory functions in a container builder, with unique symbols mapping services available in the container to their type. These factory functions can return anything, allowing configuration objects, class instances, functions or any other type of value to be defined as a container service. Any code can be containerized without need for modifications such as annotations or static properties.
+**tsinject** works by defining named factory functions in a container builder, with unique symbols mapping services available in the container to their type. These factory functions can return anything, allowing configuration objects, class instances, functions or any other type of value to be defined as a container service. Any code can be containerized without need for modifications such as annotations or static properties.
 
 Any application that does something useful needs to cause side effects. These might include:
 
@@ -37,7 +37,7 @@ Any application that does something useful needs to cause side effects. These mi
 - Asking the user for input
 - Logging a message to the console
 
-These capabilities are implemented by components of the application, with some components depending on others, and with the implementation or configuration of components often depending on values read from the environment. The quickest way to allow components to communicate with each other is often via globally defined singleton instances. This increases complexity, making code more difficult to debug, test and maintain. Instead, by building components that have their dependencies injected, we can create complex but decoupled applications.
+These capabilities are implemented by components of the application, with some components depending on others, and with the implementation or configuration of components often depending on values read from the environment. The quickest way to allow components to communicate with each other is often via globally defined singleton instances. Importing these global side effects throughout an application can increase complexity, making code more difficult to debug, test and maintain. Instead, by building components that have their dependencies injected, we can create complex but decoupled applications.
 
 ## Usage
 

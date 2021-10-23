@@ -22,7 +22,7 @@
 <p><span style="color:green">&check;</span> Flexibility, composability and reusability of components</p>
 <p><span style="color:green">&check;</span> Sharing global resources while avoiding global side effects</p>
 <p><span style="color:green">&check;</span> Achieving loose coupling in large applications</p>
-<p>tsinject works by defining named factory functions in a container builder, with unique symbols mapping services available in the container to their type. These factory functions can return anything, allowing configuration objects, class instances, functions or any other type of value to be defined as a container service. Any code can be containerized without need for modifications such as annotations or static properties.</p>
+<p><strong>tsinject</strong> works by defining named factory functions in a container builder, with unique symbols mapping services available in the container to their type. These factory functions can return anything, allowing configuration objects, class instances, functions or any other type of value to be defined as a container service. Any code can be containerized without need for modifications such as annotations or static properties.</p>
 <p>Any application that does something useful needs to cause side effects. These might include:</p>
 <ul>
 <li>Reading or writing some data in a database</li>
@@ -30,7 +30,7 @@
 <li>Asking the user for input</li>
 <li>Logging a message to the console</li>
 </ul>
-<p>These capabilities are implemented by components of the application, with some components depending on others, and with the implementation or configuration of components often depending on values read from the environment. The quickest way to allow components to communicate with each other is often via globally defined singleton instances. This increases complexity, making code more difficult to debug, test and maintain. Instead, by building components that have their dependencies injected, we can create complex but decoupled applications.</p>
+<p>These capabilities are implemented by components of the application, with some components depending on others, and with the implementation or configuration of components often depending on values read from the environment. The quickest way to allow components to communicate with each other is often via globally defined singleton instances. Importing these global side effects throughout an application can increase complexity, making code more difficult to debug, test and maintain. Instead, by building components that have their dependencies injected, we can create complex but decoupled applications.</p>
 
 <a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
   <h2>Usage</h2>
