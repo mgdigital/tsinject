@@ -173,77 +173,40 @@ const myCustomLoggingModule: ContainerModule<
   )
 ```
 
-We can also use decorators to achieve features that aren't explicitly implemented in this library, such as service tagging, which we can do by defining a service as a key-value object (actually, a simple array might do for some cases but using key-values prevents accidental duplicates if modules are reused):
+We can also use decorators to achieve features that aren't explicitly implemented in this library, such as service tagging, which we can do by defining a service as an array:
 
 ```typescript
-import type { ContainerKey, ContainerModule } from '@mgdigital/tsinject'
-import { containerKeyValues } from '@mgdigital/tsinject'
+import type { ContainerModule } from '@mgdigital/tsinject'
 
-// Assume a type of service that we wish to tag, along with a sevice that depends on the tagged services.
-
-class TaggedService {}
-
-class TaggedServiceConsumer {
-  constructor (
-    public readonly taggedServices: TaggedService[]
-  ) {}
-}
+type TaggedServiceType = { foo: string }
 
 const serviceTag = Symbol('serviceTag')
-const taggedServiceConsumer = Symbol('taggedServiceConsumer')
 
-type ParentModuleServiceMap = {
-  // `TaggedServiceConsumer` depends on an array, but using an object here prevents accidental duplicates.
-  [serviceTag]: Record<ContainerKey, TaggedService>
-  [taggedServiceConsumer]: TaggedServiceConsumer
+type ServiceMap = {
+  [serviceTag]: TaggedServiceType[]
 }
 
-const parentModule: ContainerModule<
-  ParentModuleServiceMap
+const myModule: ContainerModule<
+  ServiceMap
 > = builder => builder
-  // Define an empty object of tagged services
   .define(
     serviceTag,
-    () => ({})
-  )
-  .define(
-    taggedServiceConsumer,
-    container => new TaggedServiceConsumer(
-      // This utility method converts the tagged service object to an array
-      containerKeyValues(
-        container.get(serviceTag)
-      )
-    )
+    () => []
   )
 
-// Then define child modules that will provide tagged services
-
-const taggedService = Symbol('taggedService')
-
-type ChildModuleServiceMap = {
-  [taggedService]: TaggedService
-}
-
-const childModule: ContainerModule<
-  ParentModuleServiceMap &
-  ChildModuleServiceMap
+const myOtherModule: ContainerModule<
+  ServiceMap
 > = builder => builder
-  .use(parentModule)
-  .define(
-    taggedService,
-    () => new TaggedService()
-  )
+  .use(myModule)
   .decorate(
     serviceTag,
-    // Add a service to the already tagged services
-    factory => container => ({
+    // Add a service to the array of already defined services
+    factory => container => [
       ...factory(container),
-      [taggedService]: container.get(taggedService)
-    })
+      { foo: 'bar' }
+    ]
   )
 ```
-
----
 
 And that's it - unlike some other DI containers that claim to be lightweight, tsinject really is tiny and has a simple API, allowing large and complex but loosely coupled applications to be built from small, simple and easily testable components.
 
