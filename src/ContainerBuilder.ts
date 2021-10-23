@@ -19,11 +19,12 @@ import Container from './Container'
 class ContainerBuilder<TServiceMap extends ServiceMap>
 implements IContainerBuilder<TServiceMap> {
   private constructor (
-    private readonly factories: FactoryMap<TServiceMap>
+    private readonly factories: FactoryMap<TServiceMap>,
+    private readonly usedModules: ContainerKey[]
   ) { }
 
   static create (): IContainerBuilder {
-    return new ContainerBuilder({})
+    return new ContainerBuilder({}, [])
   }
 
   define <
@@ -33,13 +34,13 @@ implements IContainerBuilder<TServiceMap> {
     key: TKey,
     factory: Factory<TService, TServiceMap>
    ): IContainerBuilder<TServiceMap & { [key in TKey]: TService }> {
-    if (key in this.factories) {
-      return this
-    }
-    return new ContainerBuilder({
-      ...this.factories,
-      [key]: factory
-    } as FactoryMap<TServiceMap & { [key in TKey]: TService }>)
+    return new ContainerBuilder(
+      {
+        ...this.factories,
+        [key]: factory
+      } as FactoryMap<TServiceMap & { [key in TKey]: TService }>,
+      this.usedModules
+    )
   }
 
   decorate <
@@ -49,12 +50,15 @@ implements IContainerBuilder<TServiceMap> {
     key: TKey,
     decorator: Decorator<TTServiceMap, TKey>
   ): IContainerBuilder<TServiceMap> {
-    return new ContainerBuilder({
-      ...this.factories,
-      [key]: decorator(
-        this.factories[key as ContainerKey] as Factory<ServiceTypeOf<TTServiceMap, TKey>>
-      )
-    })
+    return new ContainerBuilder(
+      {
+        ...this.factories,
+        [key]: decorator(
+          this.factories[key as ContainerKey] as Factory<ServiceTypeOf<TTServiceMap, TKey>>
+        )
+      },
+      this.usedModules
+    )
   }
 
   use <
@@ -63,7 +67,15 @@ implements IContainerBuilder<TServiceMap> {
   >(
     module: ContainerModule<TModuleServices, TRequiredServices>
   ): IContainerBuilder<TServiceMap & TModuleServices> {
-    return module(this)
+    if (this.usedModules.includes(module.key)) {
+      return this
+    }
+    return module.build(
+      new ContainerBuilder(
+        this.factories,
+        [...this.usedModules, module.key]
+      )
+    )
   }
 
   createContainer (): IContainer<TServiceMap> {

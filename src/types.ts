@@ -150,14 +150,26 @@ export type Decorator<
  *
  * @typeParam TModuleServices - The [[ServiceMap]] of services provided by the module.
  * @typeParam TRequiredServices - The [[ServiceMap]] of services required by the module.
- * @param builder - A [[ContainerBuilder]] instance with the required services defined.
- * @returns A [[ContainerBuilder]] instance with the provided services defined.
  */
 export type ContainerModule<
   TProvidedServices extends ServiceMap = ServiceMap,
   TRequiredServices extends ServiceMap = ServiceMap
-> = (builder: IContainerBuilder<TRequiredServices>) =>
-  IContainerBuilder<TRequiredServices & TProvidedServices>
+> = {
+  /**
+   * The unique key of the module.
+   * Modules may be used multiple times, but each key will only be built once in the same container.
+   */
+  key: ContainerKey
+
+  /**
+   * A function that builds the module's services.
+   *
+   * @param builder - A [[IContainerBuilder]] instance with the required services defined.
+   * @returns A [[IContainerBuilder]] instance with the provided services defined.
+   */
+  build: (builder: IContainerBuilder<TRequiredServices>) =>
+    IContainerBuilder<TRequiredServices & TProvidedServices>
+}
 
 /**
  * A map of container keys to factory functions (used internally).

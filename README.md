@@ -84,35 +84,39 @@ import simpleLogFormatter from '../../logging/simpleLogFormatter'
 const loggingModule: ContainerModule<
   processEnvModule.services &
   LoggingServices
-> = builder => builder
-  // Use another container module that provides services required by this one
-  .use(processEnvModule.default)
-  // Define a config object based on environment variables
-  .define(
-    keys.loggerConfig,
-    container => loggerConfigFromEnv(
-      container.get(processEnvModule.keys.processEnv)
+> = {
+  // Specify a unique key for the module
+  key: Symbol('loggingModule'),
+  build: builder => builder
+    // Use another container module that provides services required by this one
+    .use(processEnvModule.default)
+    // Define a config object based on environment variables
+    .define(
+      keys.loggerConfig,
+      container => loggerConfigFromEnv(
+        container.get(processEnvModule.keys.processEnv)
+      )
     )
-  )
-  // Provide a different implementation depending on environment variable configuration
-  .define(
-    keys.logFormatter,
-    container => container.get(keys.loggerConfig).pretty
-      ? prettyLogFormatter
-      : simpleLogFormatter
-  )
-  .define(
-    keys.logWriter,
-    () => consoleLogWriter
-  )
-  .define(
-    keys.logger,
-    container => new Logger(
-      container.get(keys.logFormatter),
-      container.get(keys.logWriter),
-      container.get(keys.loggerConfig).level
+    // Provide a different implementation depending on environment variable configuration
+    .define(
+      keys.logFormatter,
+      container => container.get(keys.loggerConfig).pretty
+        ? prettyLogFormatter
+        : simpleLogFormatter
     )
-  )
+    .define(
+      keys.logWriter,
+      () => consoleLogWriter
+    )
+    .define(
+      keys.logger,
+      container => new Logger(
+        container.get(keys.logFormatter),
+        container.get(keys.logWriter),
+        container.get(keys.loggerConfig).level
+      )
+    )
+}
 
 export default loggingModule
 ```
@@ -134,8 +138,6 @@ logger.info('Logging something!')
 
 **Note:** We should only call [IContainer.get](https://mgdigital.github.io/tsinject/interfaces/IContainer.html#get) from within a factory function or from the [composition root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/), avoiding the [service locator anti-pattern](https://freecontent.manning.com/the-service-locator-anti-pattern/).
 
-**Note:** When defining a service in the container, if that service key is already defined then the key will **not** be overwritten. This allows modules to be used multiple times without introducing unpredictable behaviour when using decorators. For example, if modules A and B both depend on module C, they can both use module C, and then be used together module D, where they will share the same dependency instance from module C. If an already defined service needs to be overwritten, this can be done with a decorator.
-
 ### Decorators
 
 Decorators allow us to modify an already-defined service. Let's create a custom logging module that decorates some of the services in the base module defined above:
@@ -145,32 +147,35 @@ Decorators allow us to modify an already-defined service. Let's create a custom 
 import type { ContainerModule } from '@mgdigital/tsinject'
 import * as loggingModule from './examples/container/loggingModule'
 
-const myCustomLoggingModule: ContainerModule<
+const customLoggingModule: ContainerModule<
   loggingModule.services
-> = builder => builder
-  .use(loggingModule.default)
-  // Decorate the logger config so that output is always pretty
-  .decorate(
-    loggingModule.keys.loggerConfig,
-    factory => container => ({
-      ...factory(container),
-      pretty: true
-    })
-  )
-  // Decorate the log formatter to append an exclamation mark to all log entries
-  .decorate(
-    loggingModule.keys.logFormatter,
-    factory => container => {
-      const baseFormatter = factory(container)
-      return (level, message, data) =>
-        baseFormatter(level, message, data) + '!'
-    }
-  )
-  // Overwrite the log writer with some other implementation
-  .decorate(
-    loggingModule.keys.logWriter,
-    () => () => myCustomLogWriter
-  )
+> = {
+  key: Symbol('customLoggingModule'),
+  build: builder => builder
+    .use(loggingModule.default)
+    // Decorate the logger config so that output is always pretty
+    .decorate(
+      loggingModule.keys.loggerConfig,
+      factory => container => ({
+        ...factory(container),
+        pretty: true
+      })
+    )
+    // Decorate the log formatter to append an exclamation mark to all log entries
+    .decorate(
+      loggingModule.keys.logFormatter,
+      factory => container => {
+        const baseFormatter = factory(container)
+        return (level, message, data) =>
+          baseFormatter(level, message, data) + '!'
+      }
+    )
+    // Overwrite the log writer with some other implementation
+    .decorate(
+      loggingModule.keys.logWriter,
+      () => () => myCustomLogWriter
+    )
+}
 ```
 
 We can also use decorators to achieve features that aren't explicitly implemented in this library, such as service tagging, which we can do by defining a service as an array:
@@ -188,24 +193,30 @@ type ServiceMap = {
 
 const myModule: ContainerModule<
   ServiceMap
-> = builder => builder
-  .define(
-    serviceTag,
-    () => []
-  )
+> = {
+  key: Symbol('myModule'),
+  build: builder => builder
+    .define(
+      serviceTag,
+      () => []
+    )
+}
 
 const myOtherModule: ContainerModule<
   ServiceMap
-> = builder => builder
-  .use(myModule)
-  .decorate(
-    serviceTag,
-    // Add a service to the array of already defined services
-    factory => container => [
-      ...factory(container),
-      { foo: 'bar' }
-    ]
-  )
+> = {
+  key: Symbol('myOtherModule'),
+  build: builder => builder
+    .use(myModule)
+    .decorate(
+      serviceTag,
+      // Add a service to the array of already defined services
+      factory => container => [
+        ...factory(container),
+        { foo: 'bar' }
+      ]
+    )
+}
 ```
 
 And that's it - unlike some other DI containers that claim to be lightweight, tsinject really is tiny and has a simple API, allowing large and complex but loosely coupled applications to be built from small, simple and easily testable components.

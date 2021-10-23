@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.1]
+
+- Change the `ContainerModule` type to include a key, allowing modules to be used multiple times without rebuilding
+
 ## [0.2.2]
 
 - Add `containerKeyValues` function
