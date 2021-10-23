@@ -87,6 +87,7 @@ const loggingModule: ContainerModule<
 > = {
   // Specify a unique key for the module
   key: Symbol('loggingModule'),
+  // Provide a function that builds the module in a ContainerBuilder
   build: builder => builder
     // Use another container module that provides services required by this one
     .use(processEnvModule.default)
@@ -142,7 +143,6 @@ logger.info('Logging something!')
 
 Decorators allow us to modify an already-defined service. Let's create a custom logging module that decorates some of the services in the base module defined above:
 
-
 ```typescript
 import type { ContainerModule } from '@mgdigital/tsinject'
 import * as loggingModule from './examples/container/loggingModule'
@@ -169,11 +169,6 @@ const customLoggingModule: ContainerModule<
         return (level, message, data) =>
           baseFormatter(level, message, data) + '!'
       }
-    )
-    // Overwrite the log writer with some other implementation
-    .decorate(
-      loggingModule.keys.logWriter,
-      () => () => myCustomLogWriter
     )
 }
 ```
