@@ -5,11 +5,13 @@ import getProcessEnv from '../../util/getProcessEnv'
 
 const processEnvModule: ContainerModule<
   ProcessEnvServices
-> =
-  builder => builder
+> = {
+  key: Symbol('processEnvModule'),
+  build: builder => builder
     .define(
       keys.processEnv,
       getProcessEnv
     )
+}
 
 export default processEnvModule

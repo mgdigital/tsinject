@@ -11,31 +11,38 @@ import simpleLogFormatter from '../../logging/simpleLogFormatter'
 const loggingModule: ContainerModule<
   processEnvModule.services &
   LoggingServices
-> = builder => builder
-  .use(processEnvModule.default)
-  .define(
-    keys.loggerConfig,
-    container => loggerConfigFromEnv(
-      container.get(processEnvModule.keys.processEnv)
+> = {
+  // Specify a unique key for the module
+  key: Symbol('loggingModule'),
+  build: builder => builder
+    // Use another container module that provides services required by this one
+    .use(processEnvModule.default)
+    // Define a config object based on environment variables
+    .define(
+      keys.loggerConfig,
+      container => loggerConfigFromEnv(
+        container.get(processEnvModule.keys.processEnv)
+      )
     )
-  )
-  .define(
-    keys.logFormatter,
-    container => container.get(keys.loggerConfig).pretty
-      ? prettyLogFormatter
-      : simpleLogFormatter
-  )
-  .define(
-    keys.logWriter,
-    () => consoleLogWriter
-  )
-  .define(
-    keys.logger,
-    container => new Logger(
-      container.get(keys.logFormatter),
-      container.get(keys.logWriter),
-      container.get(keys.loggerConfig).level
+    // Provide a different implementation depending on environment variable configuration
+    .define(
+      keys.logFormatter,
+      container => container.get(keys.loggerConfig).pretty
+        ? prettyLogFormatter
+        : simpleLogFormatter
     )
-  )
+    .define(
+      keys.logWriter,
+      () => consoleLogWriter
+    )
+    .define(
+      keys.logger,
+      container => new Logger(
+        container.get(keys.logFormatter),
+        container.get(keys.logWriter),
+        container.get(keys.loggerConfig).level
+      )
+    )
+}
 
 export default loggingModule

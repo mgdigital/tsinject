@@ -33,7 +33,7 @@ export type ServiceTypeOf<
  *
  * @typeParam TServiceMap - The [[ServiceMap]] of the container.
  */
-export interface IContainer<
+export interface Container<
   TServiceMap extends ServiceMap = ServiceMap
 > {
   /**
@@ -65,7 +65,7 @@ export interface IContainer<
     TKey extends keyof TServiceMap = keyof TServiceMap
   >(
     key: TKey
-  ) => this is IContainer<{ [k in TKey]: ServiceTypeOf<TServiceMap, TKey> }>
+  ) => this is Container<{ [k in TKey]: ServiceTypeOf<TServiceMap, TKey> }>
 }
 
 /**
@@ -73,7 +73,7 @@ export interface IContainer<
  *
  * @typeParam TServiceMap - The [[ServiceMap]] of services currently defined in the builder.
  */
-export interface IContainerBuilder<
+export interface ContainerBuilder<
   TServiceMap extends ServiceMap = ServiceMap
 > {
   /**
@@ -90,7 +90,7 @@ export interface IContainerBuilder<
   >(
     key: TKey,
     factory: Factory<TService, TServiceMap>
-  ) => IContainerBuilder<TServiceMap & { [key in TKey]: TService }>
+  ) => ContainerBuilder<TServiceMap & { [key in TKey]: TService }>
 
   /**
    * Decorate a service already defined in the builder.
@@ -104,7 +104,7 @@ export interface IContainerBuilder<
   >(
     key: TKey,
     decorator: Decorator<TTServiceMap, TKey>
-  ) => IContainerBuilder<TServiceMap>
+  ) => ContainerBuilder<TServiceMap>
 
   /**
    * Use a [[ContainerModule]] in this builder.
@@ -117,12 +117,12 @@ export interface IContainerBuilder<
     TRequiredServices extends TServiceMap = TServiceMap
   >(
     module: ContainerModule<TModuleServices, TRequiredServices>
-  ) => IContainerBuilder<TServiceMap & TModuleServices>
+  ) => ContainerBuilder<TServiceMap & TModuleServices>
 
   /**
-   * Create a [[IContainer]] with all the services defined in the builder.
+   * Create a [[Container]] with all the services defined in the builder.
    */
-  createContainer: () => IContainer<TServiceMap>
+  createContainer: () => Container<TServiceMap>
 }
 
 /**
@@ -134,7 +134,7 @@ export interface IContainerBuilder<
  export type Factory<
  T,
  TServiceMap extends ServiceMap = ServiceMap
-> = (container: IContainer<TServiceMap>) => T
+> = (container: Container<TServiceMap>) => T
 
 /**
  * A function that can extend a factory.
@@ -146,18 +146,30 @@ export type Decorator<
  Factory<ServiceTypeOf<TServiceMap, TKey>, TServiceMap>
 
 /**
- * A container module encapsulates one or more calls to an [[IContainerBuilder]] as a reusable component.
+ * A container module encapsulates one or more calls to an [[ContainerBuilder]] as a reusable component.
  *
  * @typeParam TModuleServices - The [[ServiceMap]] of services provided by the module.
  * @typeParam TRequiredServices - The [[ServiceMap]] of services required by the module.
- * @param builder - A [[ContainerBuilder]] instance with the required services defined.
- * @returns A [[ContainerBuilder]] instance with the provided services defined.
  */
-export type ContainerModule<
+export interface ContainerModule<
   TProvidedServices extends ServiceMap = ServiceMap,
   TRequiredServices extends ServiceMap = ServiceMap
-> = (builder: IContainerBuilder<TRequiredServices>) =>
-  IContainerBuilder<TRequiredServices & TProvidedServices>
+> {
+  /**
+   * The unique key of the module.
+   * Modules may be used multiple times, but each key will only be built once in the same container.
+   */
+  key: ContainerKey
+
+  /**
+   * A function that builds the module's services.
+   *
+   * @param builder - A [[ContainerBuilder]] instance with the required services defined.
+   * @returns A [[ContainerBuilder]] instance with the provided services defined.
+   */
+  build: (builder: ContainerBuilder<TRequiredServices>) =>
+    ContainerBuilder<TRequiredServices & TProvidedServices>
+}
 
 /**
  * A map of container keys to factory functions (used internally).

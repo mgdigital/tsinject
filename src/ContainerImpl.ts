@@ -1,7 +1,7 @@
 import type {
   ContainerKey,
   FactoryMap,
-  IContainer,
+  Container,
   ServiceMap,
   ServiceTypeOf
 } from './types'
@@ -13,11 +13,11 @@ type GetterMap<TServiceMap extends ServiceMap = ServiceMap> = {
 }
 
 /**
- * Default implementation for [[IContainer]].
+ * Default implementation for [[Container]].
  *
  * @internal
  */
-class Container<TServiceMap extends ServiceMap> implements IContainer<TServiceMap> {
+class ContainerImpl<TServiceMap extends ServiceMap> implements Container<TServiceMap> {
   private readonly getters: GetterMap<TServiceMap>
 
   constructor (
@@ -53,9 +53,9 @@ class Container<TServiceMap extends ServiceMap> implements IContainer<TServiceMa
     TKey extends keyof TServiceMap = keyof TServiceMap
   >(
     key: TKey
-  ): this is IContainer<{ [k in TKey]: ServiceTypeOf<TServiceMap, TKey> }> {
+  ): this is Container<{ [k in TKey]: ServiceTypeOf<TServiceMap, TKey> }> {
     return key in this.getters
   }
 }
 
-export default Container
+export default ContainerImpl
