@@ -1,26 +1,27 @@
-import Fastify from 'fastify'
 import type { ContainerModule } from '@mgdigital/tsinject'
 import type TaskServices from './services'
 import * as dateModule from '../dateModule'
+import * as fastifyModule from '../fastifyModule'
 import * as loggingModule from '../loggingModule'
 import * as uuidModule from '../uuidModule'
 import * as keys from './keys'
 import InMemoryTaskRepository from '../../task/InMemoryTaskRepository'
+import taskAPIFastifyRouter from '../../task/taskAPIFastifyRouter'
 import TaskService from '../../task/TaskService'
-import taskFastifyAppRouter from '../../task/taskFastifyAppRouter'
-import runFastifyServer from '../../util/runFastifyServer'
 
 const taskModule: ContainerModule<
   dateModule.services &
-  uuidModule.services &
+  fastifyModule.services &
   loggingModule.services &
+  uuidModule.services &
   TaskServices
 > = {
   key: Symbol('taskModule'),
   build: builder => builder
     .use(dateModule.default)
-    .use(uuidModule.default)
+    .use(fastifyModule.default)
     .use(loggingModule.default)
+    .use(uuidModule.default)
     .define(
       keys.taskRepository,
       () => new InMemoryTaskRepository()
@@ -35,18 +36,17 @@ const taskModule: ContainerModule<
       )
     )
     .define(
-      keys.taskFastifyApp,
-      container => taskFastifyAppRouter(
-        container.get(keys.taskService),
-        Fastify()
+      keys.taskAPIFastifyRouter,
+      container => taskAPIFastifyRouter(
+        container.get(keys.taskService)
       )
     )
-    .define(
-      keys.taskServerRunner,
-      container => runFastifyServer(
-        container.get(keys.taskFastifyApp),
-        container.get(loggingModule.keys.logger)
-      )
+    .decorate(
+      fastifyModule.keys.fastifyInstanceBuilders,
+      factory => container => [
+        ...factory(container),
+        container.get(keys.taskAPIFastifyRouter)
+      ]
     )
 }
 

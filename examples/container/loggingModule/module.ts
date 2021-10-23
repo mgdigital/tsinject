@@ -14,6 +14,7 @@ const loggingModule: ContainerModule<
 > = {
   // Specify a unique key for the module
   key: Symbol('loggingModule'),
+  // Provide a function that builds the module in a ContainerBuilder
   build: builder => builder
     // Use another container module that provides services required by this one
     .use(processEnvModule.default)

@@ -26,7 +26,7 @@
     "compile": "yarn rimraf lib && yarn mkdirp lib && tsc --project tsconfig.build.json",
     "generate-docs": "yarn rimraf docs && yarn typedoc",
     "build": "yarn compile && yarn generate-docs",
-    "example:start": "yarn ts-node ./examples/runTaskServer"
+    "example:start": "yarn ts-node ./examples/runFastifyServer"
   },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
