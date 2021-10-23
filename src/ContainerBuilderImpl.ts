@@ -2,29 +2,29 @@ import type {
   ContainerKey,
   ContainerModule,
   Decorator,
-  IContainer,
-  IContainerBuilder,
+  Container,
+  ContainerBuilder,
   FactoryMap,
   Factory,
   ServiceMap,
   ServiceTypeOf
 } from './types'
-import Container from './Container'
+import ContainerImpl from './ContainerImpl'
 
 /**
- * Default implementation for [[IContainerBuilder]].
+ * Default implementation for [[ContainerBuilder]].
  *
  * @internal
  */
-class ContainerBuilder<TServiceMap extends ServiceMap>
-implements IContainerBuilder<TServiceMap> {
+class ContainerBuilderImpl<TServiceMap extends ServiceMap>
+implements ContainerBuilder<TServiceMap> {
   private constructor (
     private readonly factories: FactoryMap<TServiceMap>,
     private readonly usedModules: ContainerKey[]
   ) { }
 
-  static create (): IContainerBuilder {
-    return new ContainerBuilder({}, [])
+  static create (): ContainerBuilder {
+    return new ContainerBuilderImpl({}, [])
   }
 
   define <
@@ -33,8 +33,8 @@ implements IContainerBuilder<TServiceMap> {
   >(
     key: TKey,
     factory: Factory<TService, TServiceMap>
-   ): IContainerBuilder<TServiceMap & { [key in TKey]: TService }> {
-    return new ContainerBuilder(
+   ): ContainerBuilder<TServiceMap & { [key in TKey]: TService }> {
+    return new ContainerBuilderImpl(
       {
         ...this.factories,
         [key]: factory
@@ -49,8 +49,8 @@ implements IContainerBuilder<TServiceMap> {
   >(
     key: TKey,
     decorator: Decorator<TTServiceMap, TKey>
-  ): IContainerBuilder<TServiceMap> {
-    return new ContainerBuilder(
+  ): ContainerBuilder<TServiceMap> {
+    return new ContainerBuilderImpl(
       {
         ...this.factories,
         [key]: decorator(
@@ -66,21 +66,21 @@ implements IContainerBuilder<TServiceMap> {
     TRequiredServices extends TServiceMap = TServiceMap
   >(
     module: ContainerModule<TModuleServices, TRequiredServices>
-  ): IContainerBuilder<TServiceMap & TModuleServices> {
+  ): ContainerBuilder<TServiceMap & TModuleServices> {
     if (this.usedModules.includes(module.key)) {
       return this
     }
     return module.build(
-      new ContainerBuilder(
+      new ContainerBuilderImpl(
         this.factories,
         [...this.usedModules, module.key]
       )
     )
   }
 
-  createContainer (): IContainer<TServiceMap> {
-    return new Container(this.factories)
+  createContainer (): Container<TServiceMap> {
+    return new ContainerImpl(this.factories)
   }
 }
 
-export default ContainerBuilder
+export default ContainerBuilderImpl

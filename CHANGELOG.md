@@ -3,6 +3,7 @@
 ## [0.3.1]
 
 - Change the `ContainerModule` type to include a key, allowing modules to be used multiple times without rebuilding
+- Simplify interface naming
 
 ## [0.2.2]
 
@@ -10,11 +11,11 @@
 
 ## [0.2.1]
 
-- Change behaviour of `IContainerBuilder.define` so that already-defined services are not overwritten
+- Change behaviour of `ContainerBuilder.define` so that already-defined services are not overwritten
 
 ## [0.1.16]
 
-- Fix type signature of `IContainerBuilder.use` method
+- Fix type signature of `ContainerBuilder.use` method
 
 ## [0.1.15]
 

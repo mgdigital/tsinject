@@ -1,12 +1,12 @@
-import type { IContainerBuilder } from './types'
-import ContainerBuilder from './ContainerBuilder'
+import type { ContainerBuilder } from './types'
+import ContainerBuilderImpl from './ContainerBuilderImpl'
 
 /**
- * Create a new IContainerBuilder instance.
+ * Create a new ContainerBuilder instance.
  *
- * @returns IContainerBuilder
+ * @returns ContainerBuilder
  */
-const newContainerBuilder = (): IContainerBuilder =>
-  ContainerBuilder.create()
+const newContainerBuilder = (): ContainerBuilder =>
+  ContainerBuilderImpl.create()
 
 export default newContainerBuilder

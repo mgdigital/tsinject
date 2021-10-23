@@ -136,7 +136,7 @@ const logger = container.get(loggingModule.keys.logger)
 logger.info('Logging something!')
 ```
 
-**Note:** We should only call [IContainer.get](https://mgdigital.github.io/tsinject/interfaces/IContainer.html#get) from within a factory function or from the [composition root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/), avoiding the [service locator anti-pattern](https://freecontent.manning.com/the-service-locator-anti-pattern/).
+**Note:** We should only call [Container.get](https://mgdigital.github.io/tsinject/interfaces/Container.html#get) from within a factory function or from the [composition root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/), avoiding the [service locator anti-pattern](https://freecontent.manning.com/the-service-locator-anti-pattern/).
 
 ### Decorators
 
