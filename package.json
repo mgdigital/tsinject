@@ -53,7 +53,7 @@
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-tsdoc": "^0.2.14",
     "fastify": "^3.22.1",
-    "husky": "^7.0.2",
+    "husky": "^7.0.4",
     "jest": "^27.2.5",
     "mkdirp": "^1.0.4",
     "nanoid": "^3.1.30",
